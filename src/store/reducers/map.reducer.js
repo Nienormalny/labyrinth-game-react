@@ -1,13 +1,8 @@
 import * as actionTypes from '../actions';
+import * as _ from 'lodash';
+
 const initialMapState = {
-    id: '',
-    creator: {
-        id: '',
-        name: '',
-        date: ''
-    },
-    map: [],
-    final: [],
+    maps: []
 }
 const mapReducer = (state = initialMapState, action) =>  {
     switch (action.type) {
@@ -16,9 +11,20 @@ const mapReducer = (state = initialMapState, action) =>  {
                 ...state,
                 maps: state.maps.concat(action.map)
             };
+        case actionTypes.UPDATE_TIME:
+            const updateMap = _.map(state.maps, map => {
+                if (map && map.id === action.map.id) {
+                    map.time = action.time;
+                    return map;
+                }
+            });
+            return {
+                ...state,
+                maps: updateMap
+            };
         default:
             return state;
     }
-}
+};
 
 export default mapReducer;
