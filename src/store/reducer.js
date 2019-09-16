@@ -1,31 +1,14 @@
-import * as _ from 'lodash';
+import { combineReducers } from 'C:/Users/dawid/AppData/Local/Microsoft/TypeScript/3.6/node_modules/redux';
+import timeReducer from './reducers/time.reducer';
+import mapReducer from './reducers/map.reducer';
 
-const initialState = {
-    maps: []
-};
+// const initialState = {
+//     maps: []
+// };
 
-const rootReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case 'ADD_NEW_MAP':
-            return {
-                ...state,
-                maps: state.maps.concat(action.map)
-            };
-        case 'UPDATE_TIME':
-            const updateMap = _.map(_.filter(state, e => e.id), map => {
-               if (map && map.id === action.map.id) {
-                   return {time: action.time}
-               }
-            });
-            if (!_.isEmpty(updateMap)) {
-                return Object.assign({}, state, {
-                    [action.map]: updateMap
-                });
-            }
-            return state;
-        default:
-            return state;
-    }
-};
+const rootReducer = combineReducers({
+    mapState: mapReducer,
+    timeState: timeReducer
+});
 
 export default rootReducer;
