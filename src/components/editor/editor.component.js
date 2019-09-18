@@ -17,14 +17,6 @@ function Editor(props) {
         changeSetting('selectedCol', value);
     };
 
-    const setHoverCreator = () => {
-        const {defaultSettings, changeSetting} = props;
-
-        changeSetting('hover', !defaultSettings.hover);
-
-        console.log('props hover', defaultSettings.hover, defaultSettings);
-    };
-
     return (
         <div className="editor">
             <div className="editor-body">
@@ -45,10 +37,6 @@ function Editor(props) {
                                         <li key={key} onClick={() => show2DEditor(val)}>{val}x{val}</li>
                                     )
                                 }))}
-                                {/*<li data-grid-value="10">10x10</li>
-                                <li data-grid-value="15">15x15</li>
-                                <li data-grid-value="20">20x20</li>
-                                <li data-grid-value="30">30x30</li>*/}
                             </ul>
                         </div>
                     </div>
