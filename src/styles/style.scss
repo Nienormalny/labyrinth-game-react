@@ -13,18 +13,22 @@
 #labyrinth-app {
   height: 100vh;
 }
-body:after {
+body {
+  background: linear-gradient(180deg, rgba(2,0,36,1) 16%, rgba(36,9,121,1) 56%, rgba(161,59,255,1) 100%);
+}
+/*body:after {
   content: '';
   display: block;
   width: 100vw;
   height: 100vh;
   position: absolute;
+  top: 0;
   background: rgb(11, 28, 35);
   background: linear-gradient(180deg, rgba(2,0,36,1) 16%, rgba(36,9,121,1) 56%, rgba(161,59,255,1) 100%);
-  /* animation-duration: 10s;
+  !* animation-duration: 10s;
   animation-name: backgroundRotation;
   animation-iteration-count: infinite;
-  animation-timing-function: linear; */
+  animation-timing-function: linear; *!
 }
 body.aframe-inspector-opened:after {
   content: 'NO, NO, NO! WRONG WAY CHEATER!';
@@ -34,7 +38,7 @@ body.aframe-inspector-opened:after {
   font-size: 25px;
   line-height: 100vh;
   z-index: 9999999;
-}
+}*/
 .aframe-inspector-opened .editor {
   display: none !important;
 }
@@ -335,14 +339,28 @@ h3 {
 body .a-enter-vr {
   position: fixed;
 }
-.editor {
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  overflow: auto;
-  transition: filter 1s ease;
-  height: 100vh;
+main {
+  display: flex;
+  justify-content: center;
+  transition: all 0.5s ease;
+  .editor {
+    /*position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    overflow: auto;
+    transition: filter 1s ease;
+    height: 100vh;*/
+    margin: 0 10px;
+    transition: all 0.5s ease;
+    .editor-body {
+      border-radius: 10px;
+    }
+  }
+  #render2D {
+    margin: 0 10px;
+    transition: all 0.5s ease;
+  }
 }
 .blury {
   filter: blur(5px);

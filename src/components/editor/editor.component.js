@@ -1,16 +1,20 @@
 import React, {useEffect} from 'react';
+import * as _ from 'lodash';
 import * as actionTypes from '../../store/actions';
 import {connect} from 'react-redux';
 import classNames from 'classnames'
 
 function Editor(props) {
     const {defaultSettings, changeSetting} = props;
-    useEffect(() => {
-        console.log('PROPS EDITOR:', props);
-    }, []);
-    const show2DEditor = () => {
+
+    const collapseEditor = () => {
         const content = document.querySelector('.creator-content');
         content.classList.contains('collapsed') ? content.classList.remove('collapsed') : content.classList.add('collapsed');
+    };
+
+    const show2DEditor = (value) => {
+        changeSetting('render2DView', !defaultSettings.render2DView);
+        changeSetting('selectedCol', value);
     };
 
     const setHoverCreator = () => {
@@ -26,7 +30,7 @@ function Editor(props) {
             <div className="editor-body">
                 <div id="settings-place">
                     <div>
-                        <p className="creator-title creator-2d" onClick={show2DEditor}>2D creator</p>
+                        <p className="creator-title creator-2d" onClick={collapseEditor}>2D creator</p>
                         <div className="creator-content collapsed">
                             <label htmlFor="creator-name">Creator name</label>
                             <input id="creator-name" name="creator-name" type="text" placeholder="Write your name"/>
@@ -36,10 +40,15 @@ function Editor(props) {
                             </div>
                             <label htmlFor="grid-settings">Set number of columns</label>
                             <ul id="grid-settings">
-                                <li data-grid-value="10">10x10</li>
+                                {_.map(defaultSettings.cols, ((val, key) => {
+                                    return (
+                                        <li key={key} onClick={() => show2DEditor(val)}>{val}x{val}</li>
+                                    )
+                                }))}
+                                {/*<li data-grid-value="10">10x10</li>
                                 <li data-grid-value="15">15x15</li>
                                 <li data-grid-value="20">20x20</li>
-                                <li data-grid-value="30">30x30</li>
+                                <li data-grid-value="30">30x30</li>*/}
                             </ul>
                         </div>
                     </div>
