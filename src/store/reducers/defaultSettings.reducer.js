@@ -1,45 +1,48 @@
 import * as actionTypes from '../actions';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 const initialDefaultSettings = {
-    countClick: 0,
-    timer: '',
-    time: {},
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    moveCounter: 0,
-    lastChange: 0,
-    renderFinish: false,
-    startSelected: false,
-    pathSelected: false,
-    finishConverting: false,
-    ownerSaved: false,
+    // activePathArray: [],
+    // applyLabyrinth: '',
+    // availablePathsArray: [],
+    cols: [10, 15, 20, 30],
+    // countClick: 0,
+    // countSelectedBlocks: 0,
+    // disableIfSelected: [],
+    // finalArray: [],
+    // finishConverting: false,
+    // finishSelected: false,
+    // finishSet: false,
+    // hours: 0,
     hover: false,
+    // labyrinthArray: [],
+    // lastChange: 0,
+    // lastClicked: '',
+    // loadedMapIndex: '',
+    // loadedMapObj: {},
+    // loadMap: JSON.parse(localStorage.getItem('maps')) ? JSON.parse(localStorage.getItem('maps')) : [],
+    // mapArray: [],
+    // maps: [],
+    // minutes: 0,
+    // moveCounter: 0,
+    // newArr: [],
+    // newCreatedMap: '',
+    // newCreatedMapIndex: '',
+    // ownerSaved: false,
+    // pathArray: [],
+    // pathCountClick: 0,
+    // pathSelected: false,
+    // renderFinish: false,
+    render2DView: false,
+    selectedCol: 0,
+    // seconds: 0,
+    // startSelected: false,
+    // time: {},
+    // timer: '',
     vrView: false,
-    finishSet: false,
-    finishSelected: false,
-    pathArray: [],
-    availablePathsArray: [],
-    activePathArray: [],
-    labyrinthArray: [],
-    disableIfSelected: [],
-    validPathOptions: [],
-    validGridOptions: [],
-    validPaths: [],
-    countSelectedBlocks: 0,
-    pathCountClick: 0,
-    finalArray: [],
-    newArr: [],
-    mapArray: [],
-    lastClicked: '',
-    applyLabyrinth: '',
-    newCreatedMap: '',
-    newCreatedMapIndex: '',
-    maps: [],
-    loadedMapObj: {},
-    loadedMapIndex: '',
-    loadMap: JSON.parse(localStorage.getItem('maps')) ? JSON.parse(localStorage.getItem('maps')) : []
+    // validPathOptions: [],
+    // validGridOptions: [],
+    // validPaths: []
 };
 
 const defaultSettingsReducer = (state = initialDefaultSettings, action) => {
@@ -48,8 +51,6 @@ const defaultSettingsReducer = (state = initialDefaultSettings, action) => {
             return initialDefaultSettings;
         case actionTypes.CHANGE_DEFAULT_SETTING:
             const settingKey = action.setting;
-            // const settingValue = _.get(action, {settingKey});
-            // console.log('CHANGE', settingValue, action);
             return {
                 ...state,
                 [settingKey]: action.value

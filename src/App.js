@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Editor from './components/editor/editor.component';
-import HiScore from './components/hiscore/hiscore.component';
-import HelpModal from './components/helpModal/helpModal.component';
+// import HiScore from './components/hiscore/hiscore.component';
+// import HelpModal from './components/helpModal/helpModal.component';
 import VrScene from './components/vrScene/vrScene.component';
+import Render2D from './components/editor/render2d.component';
 import {connect} from 'react-redux'
 import * as actionTypes from './store/actions';
 import {getRandomId, getTimeString} from './common/widgets';
@@ -52,9 +53,6 @@ const time = {
 
 
 function App(props) {
-  useEffect(() => {
-    console.log('APP', props);
-  }, []);
   return (
     <>
       <header className="heading">
@@ -69,6 +67,7 @@ function App(props) {
           </div> */}
 
           {!props.defaultSettings.vrView && <Editor/>}
+          {props.defaultSettings.render2DView && <Render2D/>}
           {/* <HelpModal/> */}
           {/* <HiScore/> */}
           {props.defaultSettings.vrView &&
