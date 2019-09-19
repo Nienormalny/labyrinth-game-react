@@ -2,11 +2,11 @@ import * as actionTypes from '../actions';
 // import * as _ from 'lodash';
 
 const initialDefaultSettings = {
-    // activePathArray: [],
+    activePathArray: [],
     // applyLabyrinth: '',
-    // availablePathsArray: [],
+    availablePathsArray: [],
     cols: [10, 15, 20, 30],
-    // countClick: 0,
+    countClick: 0,
     // countSelectedBlocks: 0,
     // disableIfSelected: [],
     // finalArray: [],
@@ -15,7 +15,7 @@ const initialDefaultSettings = {
     // finishSet: false,
     // hours: 0,
     hover: false,
-    // labyrinthArray: [],
+    labyrinthArray: [],
     // lastChange: 0,
     // lastClicked: '',
     // loadedMapIndex: '',
@@ -36,7 +36,7 @@ const initialDefaultSettings = {
     render2DView: false,
     selectedCol: 0,
     // seconds: 0,
-    // startSelected: false,
+    startSelected: false,
     // time: {},
     // timer: '',
     vrView: false,
