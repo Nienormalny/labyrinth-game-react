@@ -5,14 +5,18 @@ import {connect} from 'react-redux';
 
 function Render2D(props) {
     let {selectedCol, render2DView, labyrinthArray} = props.defaultSettings;
+    const roundWalls = selectedCol + 2;
+    const sumOfPaths = roundWalls * roundWalls;
+    const placeWidth = roundWalls * (25 + 2);
+    const pathElement = [];
+    const renderPathArray = [];
+    const renderValidPathOptions = [];
+    const renderDisableIfSelected = [];
+    const renderAvailablePathsArray = [];
+    const renderActivePathArray = [];
+    const renderLabyrinthArray = [];
 
     useEffect(() => {
-        let renderValidPathOptions = [];
-        let renderDisableIfSelected = [];
-        let renderAvailablePathsArray = [];
-        let renderActivePathArray = [];
-        let renderLabyrinthArray = [];
-
         if (render2DView) {
             let previousPath = 0;
             _.forEach(renderPathArray, (item) => {
@@ -20,8 +24,8 @@ function Render2D(props) {
                 const pathIndex = parseFloat(pathItem.dataset.pathIndex);
                 const isOutside = pathItem.dataset.pathIndex <= roundWalls
                     || pathItem.dataset.pathIndex - previousPath === roundWalls
-                    || pathItem.dataset.pathIndex > sumOfPaths - roundWalls
-                    && pathItem.dataset.pathIndex < sumOfPaths + 1,
+                    || (pathItem.dataset.pathIndex > sumOfPaths - roundWalls
+                    && pathItem.dataset.pathIndex < sumOfPaths + 1),
                     rightSide = pathItem.dataset.pathIndex - previousPath === roundWalls - 1;
                 if (isOutside) {
                     previousPath = pathIndex;
@@ -100,11 +104,7 @@ function Render2D(props) {
         console.log(props.defaultSettings);
     }, [props.defaultSettings.startSelected]);
 
-    const roundWalls = selectedCol + 2;
-    const sumOfPaths = roundWalls * roundWalls;
-    const placeWidth = roundWalls * (25 + 2);
-    const pathElement = [];
-    const renderPathArray = [];
+
 
     for (let pathNumber = 0; pathNumber < sumOfPaths; pathNumber++) {
         pathElement.push(<div className="path" data-path-index={pathNumber} key={pathNumber} onClick={event => selectRenderedPath(pathNumber, event, true)}/>);
