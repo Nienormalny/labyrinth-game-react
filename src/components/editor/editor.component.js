@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import * as _ from 'lodash';
 import * as actionTypes from '../../store/actions';
 import {connect} from 'react-redux';
@@ -51,7 +51,7 @@ function Editor(props) {
                 </div>
                 <div id="creator-place" className="hidden"/>
                 <div className="apply-block">
-                    <h3 className="apply-error"/>
+                    <h3 className="apply-error">Error</h3>
                 </div>
             </div>
         </div>

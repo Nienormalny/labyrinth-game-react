@@ -6,11 +6,11 @@ import VrScene from './components/vrScene/vrScene.component';
 import Render2D from './components/editor/render2d.component';
 import {connect} from 'react-redux'
 import * as actionTypes from './store/actions';
-import {getRandomId, getTimeString} from './common/widgets';
+// import {getRandomId, getTimeString} from './common/widgets';
 import './firebase/firebase';
 import './styles/style.scss';
 
-const map = {
+/*const map = {
   id: getRandomId(),
   creator: {
       id: getRandomId(),
@@ -48,7 +48,7 @@ const time = {
       date: new Date().getDateString()
   },
   timeString: getTimeString(20, 0, 0)
-};
+};*/
 
 
 
