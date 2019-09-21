@@ -97,24 +97,146 @@ function Render2D(props) {
                     });
                 }
             });
+            props.changeSetting('renderFinish', true);
             props.changeSetting('labyrinthArray', renderLabyrinthArray);
             props.changeSetting('activePathArray', renderActivePathArray);
             props.changeSetting('availablePathsArray', renderAvailablePathsArray);
+            props.changeSetting('validPathOptions', renderValidPathOptions);
+            props.changeSetting('disableIfSelected', renderDisableIfSelected);
         }
-        console.log(props.defaultSettings);
+        console.log('start selected', props.defaultSettings);
     }, [props.defaultSettings.startSelected]);
-
-
 
     for (let pathNumber = 0; pathNumber < sumOfPaths; pathNumber++) {
         pathElement.push(<div className="path" data-path-index={pathNumber} key={pathNumber} onClick={event => selectRenderedPath(pathNumber, event, true)}/>);
         renderPathArray.push(pathNumber);
     }
+
+    /* === GET VALID OPTIONS TO CHOSE === */
+    function showValidOptions(pathIndex) {
+        const {validPathOptions, availablePathsArray, activePathArray, vrView, countSelectedBlocks, disableIfSelected, pathArray} = props.defaultSettings;
+        const {changeSetting} = props;
+
+        changeSetting('countSelectedBlocks', countSelectedBlocks + 1);
+
+        _.forEach(validPathOptions[pathIndex], option => {
+            const rest = availablePathsArray.indexOf(parseFloat(option));
+            // validPathOption looks like [clicked element, right, left, bottom, top]
+            const pathOption = vrView ? document.getElementsByClassName('grid-path')[option] : document.getElementsByClassName('path')[option];
+            changeSetting('lastClicked', pathIndex);
+
+            if (rest > -1) {
+                availablePathsArray.splice(rest, 1);
+            }
+
+            // mark path to use, but not already disabled blocks
+            if (activePathArray[option] && !pathOption.classList.contains('disabled')) {
+                labyrinthArray[pathIndex].selected = true;
+                activePathArray[pathIndex] = false;
+
+                changeSetting('labyrinthArray', labyrinthArray);
+                changeSetting('activePathArray', activePathArray);
+
+                pathOption.style.pointerEvents = 'auto';
+                pathOption.classList.add('to-use');
+                if (vrView && !pathOption.classList.contains('selected') && !pathOption.classList.contains('start-selected') && !pathOption.classList.contains('finish') && !pathOption.classList.contains('start-selected')) {
+                    pathOption.setAttribute('color', '#ec902e');
+                    pathOption.classList.add('clickable');
+                }
+            }
+        });
+        /* === Disable block - create wall === */
+        _.mapKeys(disableIfSelected[pathIndex], (position, key) => {
+            const disOption = disableIfSelected[pathIndex][key];
+            const pathEl = document.getElementsByClassName('path');
+            const vrPathEl = document.getElementsByClassName('grid-path');
+            const pathElement = vrView ? vrPathEl[disOption.disable] : pathEl[disOption.disable];
+            let countDisabled = 0;
+
+            _.forEach(disOption.options, opt => {
+                if (labyrinthArray[opt].selected) {
+                    countDisabled = countDisabled + 1;
+                    if (disOption.options.length === countDisabled) {
+                        countDisabled = 0;
+                        pathElement.classList.remove('to-use');
+                        pathElement.classList.add('disabled');
+                        if (vrView) {
+                            pathElement.setAttribute('color', '#333333');
+                        }
+                        pathElement.style.pointerEvents = 'none';
+                        labyrinthArray[disOption.disable].active = false;
+                        changeSetting('labyrinthArray', labyrinthArray);
+
+                        document.getElementsByClassName('js-clock');
+                        document.querySelector(".js-clock");
+                        document.getElementsByTagName('h1');
+                    }
+                }
+            });
+        });
+        /* === Show selected paths / adding class to selected === */
+        _.forEach(pathArray, item => {
+            const thisItem = vrView ? document.getElementsByClassName('grid-path')[item] : document.getElementsByClassName('path')[item];
+
+            _.forEach(activePathArray, ap => {
+                if (item === ap) {
+                    console.log('DISABLE: ', item, ap);
+                    thisItem.style.pointerEvents = 'none';
+                    thisItem.classList.remove('to-use');
+                }
+            });
+            if (!activePathArray[item]) {
+                thisItem.classList.remove('to-use');
+            }
+        });
+    }
+    /* === Selecting path function === */
+    function selectPath(element, index, wasClicked) {
+        const {startSelected, renderFinish, labyrinthArray, pathCountClick, finishSet, finishSelected, vrView} = props.defaultSettings;
+        const {changeSetting} = props;
+
+        if (startSelected && renderFinish && labyrinthArray.length !== 0) {
+            if (element.classList.contains('selected') && pathCountClick === 0 && !finishSet && wasClicked) {
+                changeSetting('pathCountClick', 1);
+                changeSetting('finishSet', true);
+            } else if (pathCountClick === 1 && element.classList.contains('finish') && wasClicked && finishSelected) {
+                element.classList.remove('finish');
+                element.classList.add('selected');
+                if (vrView) {
+                    element.setAttribute('color', '#1ace65');
+                }
+                labyrinthArray[index].option = 1;
+                changeSetting('labyrinthArray', labyrinthArray);
+                changeSetting('pathCountClick', 0);
+                changeSetting('finishSet', false);
+                changeSetting('finishSelected', false);
+            } else if (!element.classList.contains('finish')) {
+                element.classList.add('selected');
+                if (vrView) {
+                    element.setAttribute('color', '#1ace65');
+                }
+                labyrinthArray[index].option = 1;
+                changeSetting('labyrinthArray', labyrinthArray);
+            }
+            if (finishSet && wasClicked && !finishSelected) {
+                element.classList.add('finish');
+                if (vrView) {
+                    element.setAttribute('color', 'blue');
+                }
+                element.classList.remove('selected');
+                labyrinthArray[index].option = 3;
+                changeSetting('labyrinthArray', labyrinthArray);
+
+                changeSetting('finishSelected', true);
+            }
+            showValidOptions(index);
+        }
+    }
     /* === Selecting start function === */
     function selectStart(element, index) {
         const {vrView} = props.defaultSettings;
         const clickable = document.querySelectorAll('.clickable');
-        Array.from(clickable).forEach(function (clickableElement) {
+        _.forEach(clickable, clickableElement => {
             clickableElement.classList.remove('clickable');
         });
 
@@ -127,22 +249,21 @@ function Render2D(props) {
                 element.setAttribute('color', '#fd2929');
             }
             props.changeSetting('startSelected', true);
-            // showValidOptions(index);
+            showValidOptions(index);
         }
     }
-
     function selectRenderedPath(selectedPathIndex, event, wasClicked) {
         const {countClick} = props.defaultSettings;
+        props.changeSetting('pathArray', renderPathArray);
         if (labyrinthArray[selectedPathIndex].active) {
-            const element = event.target,
-                pathId = selectedPathIndex;
+            const element = event.target;
 
             switch (countClick) {
                 case 0:
-                    selectStart(element, pathId);
+                    selectStart(element, selectedPathIndex);
                     break;
                 case 1:
-                    // selectPath(element, pathId, wasClicked);
+                    selectPath(element, selectedPathIndex, wasClicked);
                     break;
                 default:
                     return false;
