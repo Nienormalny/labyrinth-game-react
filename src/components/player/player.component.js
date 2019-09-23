@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import 'aframe';
 import {Entity} from 'aframe-react';
 
-export default function Player() {
+export default function Player(props) {
     useEffect(() => {
         setPlayer();
         setCircle();
@@ -29,10 +29,10 @@ export default function Player() {
             radiusOuter: 0.012,
             radiusInner: 0.005
         });
-    }
+    };
     return (
         <Entity id="player">
-            <Entity position={{x: 0, y: 1, z: 0}} light={{type: 'point', color: '#ffffff', intensity: 2, decay: 2, distance: 5,}} />
+            <Entity position={props.setPosition} light={{type: 'point', color: '#ffffff', intensity: 2, decay: 2, distance: 5,}} />
             <Entity laser-controls raycaster="far: 35" />
             <Entity id="control" camera look-controls>
                 <Entity id="cursor" />

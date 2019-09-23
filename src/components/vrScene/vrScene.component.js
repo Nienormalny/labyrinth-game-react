@@ -2,12 +2,15 @@ import React from 'react';
 import 'aframe';
 import {Scene, Entity} from 'aframe-react';
 import Player from '../player/player.component';
+import * as actionTypes from '../../store/actions';
+import {connect} from 'react-redux';
 
-export default function VrScene() {
+function VrScene(props) {
+    const {renderVrCreator} = props.defaultSettings;
     return (
         <Scene  id="labyrinth-scene" background={{color: 'black'}} wasd-controls={false}>
             <Player/>
-            <Entity id="render-vr">
+            {renderVrCreator && <Entity id="render-vr">
                 <Entity light={{type: 'spot', color: '#ffffff', intensity: 3, decay: 1.6, distance: 24.5}} position={{x: 0, y: 7.5, z: -13}} />
                 <Entity light={{type: 'spot', color: '#ffffff', intensity: 5, decay: 1.6, distance: 24.5}} position={{x: 0, y: 20, z: -13}} />
                 <a-plane rotation={{x: -90, y: 0, z: 0}} color="#fd2929" scale={{x: 10, y: 10, z: 0}} />
@@ -24,7 +27,21 @@ export default function VrScene() {
                 <a-text id="toggle-cursor" className="clickable" value="Click to turn off circle at the center" align="center" geometry="primitive: plane; width: 4" material="color: #fd2929" scale="0.3 0.3 1" position="0 1.5 -3" rotation="-45 0 0" />
                 <a-text id="start-game" value="START GAME" align="center" geometry="primitive: plane;  width: 3" material="color: #05a349" scale="0.3 0.3 1" position="0 1.5 -2" rotation="-45 0 0" />
                 <a-box geometry="primitive: cylinder" color="#ddd" scale="1 1 1" />
-            </Entity>
+            </Entity>}
         </Scene>
     );
 }
+
+const mapStateToProps = state => {
+    return {
+        defaultSettings: state.defaultSettings
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        changeSetting: (setting, value) => dispatch({type: actionTypes.CHANGE_DEFAULT_SETTING, setting, value})
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(VrScene);

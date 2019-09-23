@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Editor from './components/editor/editor.component';
 // import HiScore from './components/hiscore/hiscore.component';
 // import HelpModal from './components/helpModal/helpModal.component';
@@ -9,6 +9,7 @@ import * as actionTypes from './store/actions';
 // import {getRandomId, getTimeString} from './common/widgets';
 import './firebase/firebase';
 import './styles/style.scss';
+import Render3D from './components/editor/render3d.component';
 
 /*const map = {
   id: getRandomId(),
@@ -50,35 +51,31 @@ const time = {
   timeString: getTimeString(20, 0, 0)
 };*/
 
-
-
 function App(props) {
-  return (
-    <>
-      <header className="heading">
-        <h1>Welcome to the Labyrinth Game Experience</h1>
-        <h3>Will you be able to back here...</h3>
-      </header>
-      <main>
-          {/* <div id="preview">
-              <Scene id="labyrinth-scene">
-                  <Player/>
-              </Scene>
-          </div> */}
-
-          {!props.defaultSettings.vrView && <Editor/>}
-          {props.defaultSettings.render2DView && <Render2D/>}
-          {/* <HelpModal/> */}
-          {/* <HiScore/> */}
-          {props.defaultSettings.vrView &&
-            <div className="preview">
-              <VrScene/>
-            </div>
-          }
-          <div id="loadedMaps" className="hidden"/>
-      </main>
-    </>
-  );
+    useEffect(() => {
+        console.log('DEFAULT SETTINGS', props.defaultSettings)
+    }, [props.defaultSettings]);
+    return (
+        <>
+            <header className="heading">
+                <h1>Welcome to the Labyrinth Game Experience</h1>
+                <h3>Will you be able to back here...</h3>
+            </header>
+            <main>
+                {props.defaultSettings.canRenderVr && <Render3D/>}
+                {!props.defaultSettings.vrView && <Editor/>}
+                {props.defaultSettings.render2DView && <Render2D/>}
+                {/* <HelpModal/> */}
+                {/* <HiScore/> */}
+                {props.defaultSettings.vrView &&
+                    <div className="preview">
+                        <VrScene/>
+                    </div>
+                }
+                <div id="loadedMaps" className="hidden"/>
+            </main>
+        </>
+    );
 }
 
 const mapStateToProps = state => {

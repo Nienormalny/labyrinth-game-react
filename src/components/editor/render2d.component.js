@@ -2,9 +2,10 @@ import React, {useEffect} from 'react';
 import * as _ from 'lodash';
 import * as actionTypes from '../../store/actions';
 import {connect} from 'react-redux';
+import StartGame from '../startGame/startGame.component';
 
 function Render2D(props) {
-    let {selectedCol, render2DView, labyrinthArray} = props.defaultSettings;
+    let {selectedCol, render2DView, labyrinthArray, mapArray} = props.defaultSettings;
     const roundWalls = selectedCol + 2;
     const sumOfPaths = roundWalls * roundWalls;
     const placeWidth = roundWalls * (25 + 2);
@@ -97,19 +98,23 @@ function Render2D(props) {
                     });
                 }
             });
+            mapArray = [...Array(roundWalls).keys()].reduce((prev, curr) => {
+                return [...prev,  renderPathArray.slice(roundWalls * curr, roundWalls * curr + roundWalls)];
+            }, []);
             props.changeSetting('renderFinish', true);
+            props.changeSetting('mapArray', mapArray);
             props.changeSetting('labyrinthArray', renderLabyrinthArray);
             props.changeSetting('activePathArray', renderActivePathArray);
             props.changeSetting('availablePathsArray', renderAvailablePathsArray);
             props.changeSetting('validPathOptions', renderValidPathOptions);
             props.changeSetting('disableIfSelected', renderDisableIfSelected);
+            props.changeSetting('pathArray', renderPathArray);
         }
-        console.log('start selected', props.defaultSettings);
-    }, [props.defaultSettings.startSelected]);
+    }, []);
 
     for (let pathNumber = 0; pathNumber < sumOfPaths; pathNumber++) {
-        pathElement.push(<div className="path" data-path-index={pathNumber} key={pathNumber} onClick={event => selectRenderedPath(pathNumber, event, true)}/>);
         renderPathArray.push(pathNumber);
+        pathElement.push(<div className="path" data-path-index={pathNumber} key={pathNumber} onClick={event => selectRenderedPath(pathNumber, event, true)}/>);
     }
 
     /* === GET VALID OPTIONS TO CHOSE === */
@@ -120,13 +125,13 @@ function Render2D(props) {
         changeSetting('countSelectedBlocks', countSelectedBlocks + 1);
 
         _.forEach(validPathOptions[pathIndex], option => {
-            const rest = availablePathsArray.indexOf(parseFloat(option));
+            const rest = availablePathsArray.indexOf(option);
             // validPathOption looks like [clicked element, right, left, bottom, top]
             const pathOption = vrView ? document.getElementsByClassName('grid-path')[option] : document.getElementsByClassName('path')[option];
             changeSetting('lastClicked', pathIndex);
-
             if (rest > -1) {
                 availablePathsArray.splice(rest, 1);
+                changeSetting('availablePathsArray', availablePathsArray);
             }
 
             // mark path to use, but not already disabled blocks
@@ -177,10 +182,8 @@ function Render2D(props) {
         /* === Show selected paths / adding class to selected === */
         _.forEach(pathArray, item => {
             const thisItem = vrView ? document.getElementsByClassName('grid-path')[item] : document.getElementsByClassName('path')[item];
-
-            _.forEach(activePathArray, ap => {
+            _.forEach(availablePathsArray, ap => {
                 if (item === ap) {
-                    console.log('DISABLE: ', item, ap);
                     thisItem.style.pointerEvents = 'none';
                     thisItem.classList.remove('to-use');
                 }
@@ -189,36 +192,43 @@ function Render2D(props) {
                 thisItem.classList.remove('to-use');
             }
         });
+        console.log('DEFAULT SETTINGS', props.defaultSettings);
     }
     /* === Selecting path function === */
     function selectPath(element, index, wasClicked) {
-        const {startSelected, renderFinish, labyrinthArray, pathCountClick, finishSet, finishSelected, vrView} = props.defaultSettings;
+        const {startSelected, renderFinish, labyrinthArray, finishCanBeSelected, finishSelected, vrView} = props.defaultSettings;
         const {changeSetting} = props;
 
+
+
+
         if (startSelected && renderFinish && labyrinthArray.length !== 0) {
-            if (element.classList.contains('selected') && pathCountClick === 0 && !finishSet && wasClicked) {
-                changeSetting('pathCountClick', 1);
-                changeSetting('finishSet', true);
-            } else if (pathCountClick === 1 && element.classList.contains('finish') && wasClicked && finishSelected) {
+            if (element.classList.contains('to-use') && wasClicked) {
+                element.classList.add('selected');
+                element.dataset.clickCounter = '1';
+                element.classList.remove('to-use');
+                labyrinthArray[index].option = 1;
+                changeSetting('labyrinthArray', labyrinthArray);
+            } else if (element.dataset.clickCounter === '1' && wasClicked) {
+                element.dataset.clickCounter = '2';
+            }
+
+            if (element.classList.contains('selected') && !finishCanBeSelected && wasClicked) {
+                changeSetting('finishCanBeSelected', true);
+            } else if (element.dataset.clickCounter === '2' && element.classList.contains('finish') && wasClicked && finishSelected) {
                 element.classList.remove('finish');
                 element.classList.add('selected');
+                element.dataset.clickCounter = '1';
                 if (vrView) {
                     element.setAttribute('color', '#1ace65');
                 }
                 labyrinthArray[index].option = 1;
                 changeSetting('labyrinthArray', labyrinthArray);
-                changeSetting('pathCountClick', 0);
-                changeSetting('finishSet', false);
+                changeSetting('finishCanBeSelected', false);
                 changeSetting('finishSelected', false);
-            } else if (!element.classList.contains('finish')) {
-                element.classList.add('selected');
-                if (vrView) {
-                    element.setAttribute('color', '#1ace65');
-                }
-                labyrinthArray[index].option = 1;
-                changeSetting('labyrinthArray', labyrinthArray);
             }
-            if (finishSet && wasClicked && !finishSelected) {
+
+            if (element.dataset.clickCounter === '2' && finishCanBeSelected && wasClicked && !finishSelected) {
                 element.classList.add('finish');
                 if (vrView) {
                     element.setAttribute('color', 'blue');
@@ -226,7 +236,6 @@ function Render2D(props) {
                 element.classList.remove('selected');
                 labyrinthArray[index].option = 3;
                 changeSetting('labyrinthArray', labyrinthArray);
-
                 changeSetting('finishSelected', true);
             }
             showValidOptions(index);
@@ -254,7 +263,8 @@ function Render2D(props) {
     }
     function selectRenderedPath(selectedPathIndex, event, wasClicked) {
         const {countClick} = props.defaultSettings;
-        props.changeSetting('pathArray', renderPathArray);
+        // console.log('RENDER Path Array', renderPathArray);
+
         if (labyrinthArray[selectedPathIndex].active) {
             const element = event.target;
 
@@ -263,7 +273,8 @@ function Render2D(props) {
                     selectStart(element, selectedPathIndex);
                     break;
                 case 1:
-                    selectPath(element, selectedPathIndex, wasClicked);
+                    console.log('ELEMENT', element);
+                    selectPath(event.target, selectedPathIndex, wasClicked);
                     break;
                 default:
                     return false;
@@ -273,6 +284,7 @@ function Render2D(props) {
 
     return (
         <div id="render2D">
+            <StartGame/>
             <div id="creator-place" style={{width: placeWidth}}>
                 {pathElement}
             </div>
