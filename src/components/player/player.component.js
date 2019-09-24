@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 function Player(props) {
     let defaultSettings = props.defaultSettings;
     let playerPosition = defaultSettings.actualPlayerPosition;
-    
+
     return (
         <Entity id="player" look-controls>
             <Entity position={playerPosition} light={{type: 'point', color: '#ffffff', intensity: 2, decay: 2, distance: 5,}} />
@@ -20,7 +20,8 @@ function Player(props) {
             </Entity>
         </Entity>
     );
-}
+};
+
 const mapStateToProps = state => {
     return {
         defaultSettings: state.defaultSettings
