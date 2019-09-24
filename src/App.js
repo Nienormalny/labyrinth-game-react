@@ -67,11 +67,11 @@ function App(props) {
                 {props.defaultSettings.render2DView && <Render2D/>}
                 {/* <HelpModal/> */}
                 {/* <HiScore/> */}
-                {props.defaultSettings.vrView &&
+                {/*props.defaultSettings.vrView &&
                     <div className="preview">
                         <VrScene/>
                     </div>
-                }
+                */}
                 <div id="loadedMaps" className="hidden"/>
             </main>
         </>
