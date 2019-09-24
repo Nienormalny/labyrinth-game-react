@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions';
-// import * as _ from 'lodash';
 
 const initialDefaultSettings = {
     activePathArray: [],

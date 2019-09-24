@@ -45,7 +45,7 @@ function Render3D(props) {
             {render3DBlocks}
         </a-scene>
     )
-}
+};
 
 const mapStateToProps = state => {
     return {

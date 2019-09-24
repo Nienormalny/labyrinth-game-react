@@ -30,7 +30,7 @@ function VrScene(props) {
             </Entity>}
         </Scene>
     );
-}
+};
 
 const mapStateToProps = state => {
     return {

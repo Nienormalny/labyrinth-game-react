@@ -98,9 +98,11 @@ function Render2D(props) {
                     });
                 }
             });
+
             mapArray = [...Array(roundWalls).keys()].reduce((prev, curr) => {
                 return [...prev,  renderPathArray.slice(roundWalls * curr, roundWalls * curr + roundWalls)];
             }, []);
+
             props.changeSetting('renderFinish', true);
             props.changeSetting('mapArray', mapArray);
             props.changeSetting('labyrinthArray', renderLabyrinthArray);
@@ -263,7 +265,6 @@ function Render2D(props) {
     }
     function selectRenderedPath(selectedPathIndex, event, wasClicked) {
         const {countClick} = props.defaultSettings;
-        // console.log('RENDER Path Array', renderPathArray);
 
         if (labyrinthArray[selectedPathIndex].active) {
             const element = event.target;
