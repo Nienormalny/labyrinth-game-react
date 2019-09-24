@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import * as _ from 'lodash';
 import 'aframe';
 import {Entity} from 'aframe-react';
@@ -8,24 +8,34 @@ import Player from '../player/player.component';
 
 function Render3D(props) {
     const {mapArray, finalMapArray} = props.defaultSettings;
-    let positionPlayer = {x: 0, y: 0.5, z: 0} /* (THIS IS INITIAL VALUE) */;
+    let positionPlayer = {x: 0, y: 1, z: 0} /* (THIS IS INITIAL VALUE) */;
+    const changePosition = (position) => {
+      props.changeSetting('actualPlayerPosition', position)
+    };
+
     let render3DBlocks = _.map(mapArray, (n, x) => {
         return _.map(mapArray, (a, z) => {
             switch (finalMapArray[mapArray[x][z]]) {
                 case 0:
                     return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 5}} position={{x, y: 0.5, z}} material={{color: '#333333'}} option="0" data-name="wall"/>;
                 case 1:
-                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} position={{x, y: 0.5, z}} material={{color: '#1ace65'}} option="1" data-name="path"/>;
+                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} events={{click: () => changePosition({x, y: 1, z})}} position={{x, y: 0.5, z}} material={{color: '#1ace65'}} option="1" data-name="path"/>;
                 case 2:
-                    positionPlayer = {x, y: 0.5, z};
-                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} position={{x, y: 0.5, z}} material={{color: '#ff2c2c'}} option="2" data-name="start"/>;
+                    positionPlayer = {x, y: 1, z};
+                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} events={{click: () => changePosition({x, y: 1, z})}} position={{x, y: 0.5, z}} material={{color: '#ff2c2c'}} option="2" data-name="start"/>;
                 case 3:
-                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} position={{x, y: 0.5, z}} material={{color: '#0e7ef6'}} option="3" data-name="finish"/>;
+                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} events={{click: () => changePosition({x, y: 1, z})}} position={{x, y: 0.5, z}} material={{color: '#0e7ef6'}} option="3" data-name="finish"/>;
                 default:
                     return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 5}} position={{x, y: 0.5, z}} material={{color: '#333333'}}/>;
             }
         })
     });
+    useEffect(() => {
+        props.changeSetting('vrView', true);
+        props.changeSetting('render2DView', false);
+        props.changeSetting('timeVisible', true);
+        props.changeSetting('actualPlayerPosition', positionPlayer);
+    }, []);
 
     return (
         <a-scene>

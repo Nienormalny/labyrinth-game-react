@@ -3,6 +3,7 @@ import * as actionTypes from '../actions';
 
 const initialDefaultSettings = {
     activePathArray: [],
+    actualPlayerPosition: {x: 0, y: 1, z: 0},
     // applyLabyrinth: '',
     availablePathsArray: [],
     cols: [10, 15, 20, 30],
@@ -39,6 +40,7 @@ const initialDefaultSettings = {
     // seconds: 0,
     startSelected: false,
     time: {},
+    timeVisible: false,
     // timer: '',
     vrView: false,
     validPathOptions: [],
