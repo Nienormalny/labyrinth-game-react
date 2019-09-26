@@ -47,6 +47,7 @@ const initialDefaultSettings = {
     // timer: '',
     vrView: false,
     validCreatorName: false,
+    validPathCreated: false,
     validPathOptions: [],
     // validGridOptions: [],
     // validPaths: []
