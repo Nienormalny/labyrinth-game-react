@@ -1,13 +1,14 @@
-import React from 'react';
-import * as _ from 'lodash';
-import * as actionTypes from '../../store/actions';
-import {connect} from 'react-redux';
-import {getRandomId} from '../../common/widgets';
+import React                from 'react';
+import * as _               from 'lodash';
+import * as actionTypes     from '../../store/actions';
+import {connect}            from 'react-redux';
+import {getRandomId}        from '../../common/widgets';
 
 function StartGame(props) {
     const {defaultSettings, changeSetting} = props;
     const {labyrinthArray, loadMap, finalMapArray, mapArray, time} = defaultSettings;
     const renderFinalMapArray = [];
+    const actualMapId = getRandomId();
     const saveFinalMap = () => {
         /* Create final array to save - will be used to generate 3D blocks:
             finalArray = [0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 2, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -33,16 +34,18 @@ function StartGame(props) {
             - best time (owner, time, date)
         */
         loadMap.push({
-            id: getRandomId(),
+            id: actualMapId,
             creator: {
                 id: getRandomId(),
                 name: document.getElementById('creator-name').value,
                 date: new Date().getDateString()
             },
-            final: finalMapArray.reverse(),
+            final: renderFinalMapArray.reverse(),
             map: mapArray.reverse(),
             time
         });
+        changeSetting('actualMapId', actualMapId);
+        changeSetting('loadMap', loadMap);
         defaultSettings.finishSelected && defaultSettings.startSelected && props.changeSetting('canRenderVr', true)
     };
 

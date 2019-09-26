@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
-import * as _ from 'lodash';
-import * as actionTypes from '../../store/actions';
-import {connect} from 'react-redux';
-import StartGame from '../startGame/startGame.component';
+import React, {useEffect}       from 'react';
+import * as _                   from 'lodash';
+import * as actionTypes         from '../../store/actions';
+import {connect}                from 'react-redux';
+import StartGame                from '../startGame/startGame.component';
 
 function Render2D(props) {
     let {selectedCol, render2DView, labyrinthArray, mapArray} = props.defaultSettings;
@@ -194,7 +194,6 @@ function Render2D(props) {
                 thisItem.classList.remove('to-use');
             }
         });
-        console.log('DEFAULT SETTINGS', props.defaultSettings);
     }
     /* === Selecting path function === */
     function selectPath(element, index, wasClicked) {
@@ -274,7 +273,6 @@ function Render2D(props) {
                     selectStart(element, selectedPathIndex);
                     break;
                 case 1:
-                    console.log('ELEMENT', element);
                     selectPath(event.target, selectedPathIndex, wasClicked);
                     break;
                 default:
