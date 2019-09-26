@@ -4,7 +4,6 @@ export function getRandomId() {
     };
     return (random()+random()+"-"+random()+"-"+random()+"-"+random()+"-"+random()+random()+random());
 }
-
 export function getSeconds(timeObject) {
     if (typeof timeObject === 'undefined') {
         return 0;
@@ -14,6 +13,7 @@ export function getSeconds(timeObject) {
 export function getTimeString(seconds, minutes, hours) {
     return String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
 }
+
 Date.prototype.getDateString = function () {
     const dd = String(this.getDate()).padStart(2, '0'),
         mm = String(this.getMonth() + 1).padStart(2, '0'),
@@ -21,3 +21,4 @@ Date.prototype.getDateString = function () {
 
     return dd + '.' + mm + '.' + yyyy;
 };
+
