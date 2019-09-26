@@ -50,7 +50,7 @@ function StartGame(props) {
     };
 
     return (
-        <button onClick={saveFinalMap}>START GAME</button>
+        <button onClick={saveFinalMap} className={defaultSettings.validCreatorName ? 'start' : 'start-disabled'}>START GAME</button>
     )
 }
 

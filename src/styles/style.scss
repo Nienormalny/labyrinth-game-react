@@ -428,6 +428,33 @@ button {
   font-size: 14px;
   letter-spacing: 1px;
 }
+button.start-disabled {
+  border: 0;
+  padding: 10px;
+  color: white;
+  outline: none;
+  cursor:auto;
+  border-radius: 5px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+button.start {
+  border: 0;
+  padding: 10px;
+  background-color: #1ace65;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  border-radius: 5px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+button.start:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 7px -4px #727272;
+}
+
 label,
 input {
   width: 180px;
@@ -445,6 +472,14 @@ label {
 input {
   margin: 10px 0;
   border: 1px solid #d1d1d1;
+  padding: 5px 10px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 5px;
+}
+input.non-valid {
+  margin: 10px 0;
+  border: 2px solid red;
   padding: 5px 10px;
   font-size: 14px;
   letter-spacing: 1px;
