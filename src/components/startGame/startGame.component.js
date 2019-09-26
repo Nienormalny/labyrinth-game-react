@@ -1,20 +1,38 @@
-import React                from 'react';
-import * as _               from 'lodash';
-import * as actionTypes     from '../../store/actions';
-import {connect}            from 'react-redux';
-import {getRandomId}        from '../../common/widgets';
+import React from 'react';
+import * as actionTypes from '../../store/actions';
+import {connect} from 'react-redux';
+import classNames from 'classnames';
 import {saveFinalMap} from '../../common/render.functions';
 
 function StartGame(props) {
+    const buttonClasses = classNames({
+        'start': true,
+        'disabled': !props.defaultSettings.validCreatorName,
+        'button': true
+    });
     return (
-        <button onClick={() => saveFinalMap(props.changeSetting)}>START GAME</button>
+        <button onClick={() => props.defaultSettings.validCreatorName ? saveFinalMap(props.changeSetting) : alertCreatorName()}
+                className={buttonClasses}>START GAME</button>
     )
+}
+
+const alertCreatorName = () => {
+  alert('Please write your name as creator or log in')
 };
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
     return {
-        changeSetting: (setting, value) => dispatch({type: actionTypes.CHANGE_DEFAULT_SETTING, setting, value})
+        defaultSettings: state.defaultSettings
     }
 };
+const mapDispatchToProps = dispatch => {
+  return {
+    changeSetting: (setting, value) =>
+      dispatch({ type: actionTypes.CHANGE_DEFAULT_SETTING, setting, value })
+  }
+};
 
-export default connect(null, mapDispatchToProps)(StartGame);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StartGame)

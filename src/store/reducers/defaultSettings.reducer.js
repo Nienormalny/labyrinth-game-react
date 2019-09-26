@@ -50,6 +50,8 @@ const initialDefaultSettings = {
     timeStringValue: '00:00:00',
     // timer: '',
     vrView: false,
+    validCreatorName: false,
+    validPathCreated: false,
     validPathOptions: [],
     // validGridOptions: [],
     // validPaths: []
