@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/src/firebase
+/src/firebase/*
 /.idea
 /.pnp
 /.firebase
