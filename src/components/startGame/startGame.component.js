@@ -6,7 +6,7 @@ import {getRandomId}        from '../../common/widgets';
 
 function StartGame(props) {
     const {defaultSettings, changeSetting} = props;
-    const {labyrinthArray, loadMap, finalMapArray, mapArray, time} = defaultSettings;
+    const {labyrinthArray, loadMap, mapArray, time} = defaultSettings;
     const renderFinalMapArray = [];
     const actualMapId = getRandomId();
     const saveFinalMap = () => {
