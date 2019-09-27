@@ -7,61 +7,59 @@ import {connect}                        from 'react-redux';
 import Player                           from '../player/player.component';
 
 // const AFRAME = window.AFRAME;
+let finishPoint = false;
 
 function Render3D(props) {
     let time;
-
-    const [seconds, addSeconds] = useState(0);
-    const [minutes, addMinutes] = useState(0);
-    const [hours, addHours] = useState(0);
-    const [startCounting, setStartCounting] = useState(false);
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
 
     let fullTime;
-    const {mapArray, finalMapArray, movementCount, finish} = props.defaultSettings;
+    const {mapArray, finalMapArray, movementCount} = props.defaultSettings;
     let positionPlayer = {x: 0, y: 1, z: 0} /* (THIS IS INITIAL VALUE) */;
 
-    useEffect(() => {
-        let timer = null;
-        if (startCounting && !finish) {
-            timer = setInterval(() => count(), 1000);
-        }
-        return () => clearInterval(timer);
-    });
+    let timer = null;
 
     const changePosition = (position, option) => {
         props.changeSetting('actualPlayerPosition', position);
         props.changeSetting('movementCount', movementCount + 1);
         if (movementCount === 0) {
-            setStartCounting(true);
+            timer = setInterval(() => count(), 1000);
         }
         if (option === 'finish') {
+            finishPoint = true;
             props.changeSetting('finish', true);
         }
     };
 
     function count() {
-        addSeconds(second => second + 1);
-        if (seconds >= 60) {
-            addSeconds(0);
-            addMinutes(minute => minute + 1);
-            if (minutes >= 60) {
-                addMinutes(0);
-                addHours(hour => hour + 1);
+        if (!finishPoint) {
+            seconds = seconds + 1;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes = minutes + 1;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours = hours + 1;
+                }
             }
+
+            fullTime = String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+
+            time = {
+                seconds: seconds,
+                minutes: minutes,
+                hours: hours,
+                stringTime: fullTime,
+                owner: {}
+            };
+
+            props.changeSetting('time', time);
+            props.changeSetting('timeStringValue', fullTime);
+        } else {
+            return clearInterval(timer)
         }
-
-        fullTime = String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
-
-        time = {
-            seconds: seconds,
-            minutes: minutes,
-            hours: hours,
-            stringTime: fullTime,
-            owner: {}
-        };
-
-        props.changeSetting('time', time);
-        props.changeSetting('timeStringValue', fullTime);
     }
 
     let render3DBlocks = _.map(mapArray, (n, x) => {
@@ -93,7 +91,7 @@ function Render3D(props) {
         <a-scene>
             <Entity light={{type: 'spot', color: '#ffffff', intensity: 3, decay: 1.6, distance: 24.5}} position={{x: 0, y: 7.5, z: -13}} />
             <Entity light={{type: 'spot', color: '#ffffff', intensity: 5, decay: 1.6, distance: 24.5}} position={{x: 0, y: 20, z: -13}} />
-            <Player setPosition={positionPlayer}/>
+            <Player/>
             {render3DBlocks}
         </a-scene>
     )

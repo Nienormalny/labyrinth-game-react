@@ -8,11 +8,6 @@ function Player(props) {
     let defaultSettings = props.defaultSettings;
     let playerPosition = defaultSettings.actualPlayerPosition;
 
-
-    useEffect(() => {
-
-    }, [defaultSettings.movementCount, defaultSettings.finish]);
-
     return (
         <Entity id="player" look-controls>
             <Entity position={playerPosition} light={{type: 'point', color: '#ffffff', intensity: 2, decay: 2, distance: 5,}} />
