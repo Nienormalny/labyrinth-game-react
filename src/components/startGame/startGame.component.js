@@ -1,27 +1,33 @@
-import React                from 'react';
-import * as _               from 'lodash';
-import * as actionTypes     from '../../store/actions';
-import {connect}            from 'react-redux';
-import {getRandomId}        from '../../common/widgets';
+import React from 'react'
+import * as _ from 'lodash'
+import * as actionTypes from '../../store/actions'
+import { connect } from 'react-redux'
+import { getRandomId } from '../../common/widgets'
 
 function StartGame(props) {
-    const {defaultSettings, changeSetting} = props;
-    const {labyrinthArray, loadMap, finalMapArray, mapArray, time} = defaultSettings;
-    const renderFinalMapArray = [];
-    const actualMapId = getRandomId();
-    const saveFinalMap = () => {
-        /* Create final array to save - will be used to generate 3D blocks:
+  const { defaultSettings, changeSetting } = props
+  const {
+    labyrinthArray,
+    loadMap,
+    finalMapArray,
+    mapArray,
+    time
+  } = defaultSettings
+  const renderFinalMapArray = []
+  const actualMapId = getRandomId()
+  const saveFinalMap = () => {
+    /* Create final array to save - will be used to generate 3D blocks:
             finalArray = [0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 2, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
             0 - define wall
             1 - define path
             2 - define start
             3 - define finish
         */
-        _.mapKeys(labyrinthArray, (labyrinth, key) => {
-            renderFinalMapArray.push(labyrinthArray[key].option);
-        });
-        changeSetting('finalMapArray', renderFinalMapArray);
-        /* loadMap is an Array, that will be saved in localstorage, with all data like:
+    _.mapKeys(labyrinthArray, (labyrinth, key) => {
+      renderFinalMapArray.push(labyrinthArray[key].option)
+    })
+    changeSetting('finalMapArray', renderFinalMapArray)
+    /* loadMap is an Array, that will be saved in localstorage, with all data like:
             - person that created map
             - finalArray to render correct places (wall, start, path, finish)
             - mapArray (3x3 example): [
@@ -33,37 +39,58 @@ function StartGame(props) {
             ]
             - best time (owner, time, date)
         */
-        loadMap.push({
-            id: actualMapId,
-            creator: {
-                id: getRandomId(),
-                name: document.getElementById('creator-name').value,
-                date: new Date().getDateString()
-            },
-            final: renderFinalMapArray.reverse(),
-            map: mapArray.reverse(),
-            time
-        });
-        changeSetting('actualMapId', actualMapId);
-        changeSetting('loadMap', loadMap);
-        defaultSettings.finishSelected && defaultSettings.startSelected && props.changeSetting('canRenderVr', true)
-    };
+    loadMap.push({
+      id: actualMapId,
+      creator: {
+        id: getRandomId(),
+        name: document.getElementById('creator-name').value,
+        date: new Date().getDateString()
+      },
+      final: renderFinalMapArray.reverse(),
+      map: mapArray.reverse(),
+      time
+    })
+    changeSetting('actualMapId', actualMapId)
+    changeSetting('loadMap', loadMap)
+    defaultSettings.finishSelected &&
+      defaultSettings.startSelected &&
+      props.changeSetting('canRenderVr', true)
+  }
 
-    return (
-        <button onClick={saveFinalMap} className={defaultSettings.validCreatorName && defaultSettings.validPathCreated ? 'start' : 'start-disabled'}>START GAME</button>
-    )
+  return (
+    <button
+      onClick={
+        defaultSettings.validCreatorName ? saveFinalMap : alertCreatorName
+      }
+      className={
+        defaultSettings.validCreatorName //&& defaultSettings.validPathCreated
+          ? 'start'
+          : 'start-disabled'
+      }
+    >
+      START GAME
+    </button>
+  )
+}
+
+const alertCreatorName = () => {
+  alert('Please write your name as creator or log in')
 }
 
 const mapStateToProps = state => {
-    return {
-        defaultSettings: state.defaultSettings
-    }
-};
+  return {
+    defaultSettings: state.defaultSettings
+  }
+}
 
 const mapDispatchToProps = dispatch => {
-    return {
-        changeSetting: (setting, value) => dispatch({type: actionTypes.CHANGE_DEFAULT_SETTING, setting, value})
-    }
-};
+  return {
+    changeSetting: (setting, value) =>
+      dispatch({ type: actionTypes.CHANGE_DEFAULT_SETTING, setting, value })
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(StartGame);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StartGame)
