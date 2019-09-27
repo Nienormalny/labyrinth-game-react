@@ -4,6 +4,7 @@
 /node_modules
 /.idea
 /.pnp
+/.firebase
 .pnp.js
 
 # testing
