@@ -5,6 +5,7 @@
 /src/firebase
 /.idea
 /.pnp
+/.firebase
 .pnp.js
 
 # testing
