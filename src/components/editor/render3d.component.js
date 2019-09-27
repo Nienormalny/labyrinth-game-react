@@ -82,7 +82,7 @@ function Render3D(props) {
 
     useEffect(() => {
         props.changeSetting('vrView', true);
-        props.changeSetting('render2DView', false);
+        props.changeSetting('generateGrid', false);
         props.changeSetting('timeVisible', true);
         props.changeSetting('actualPlayerPosition', positionPlayer);
     }, []);

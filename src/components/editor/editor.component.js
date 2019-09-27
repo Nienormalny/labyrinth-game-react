@@ -13,8 +13,26 @@ function Editor(props) {
     };
 
     const show2DEditor = (value) => {
-        changeSetting('render2DView', !defaultSettings.render2DView);
+        const roundWalls = value + 2;
+        const sumOfPaths = roundWalls * roundWalls;
+        const renderPathArray = [];
+
+        for (let pathNumber = 0; pathNumber < sumOfPaths; pathNumber++) {
+            renderPathArray.push(pathNumber);
+        }
+
+        changeSetting('generateGrid', !defaultSettings.generateGrid);
         changeSetting('selectedCol', value);
+        props.changeSetting('roundWalls', roundWalls);
+        props.changeSetting('sumOfPaths', sumOfPaths);
+        props.changeSetting('placeWidth', roundWalls * (25 + 2));
+        props.changeSetting('pathArray', renderPathArray);
+    };
+
+    const render3DEditor = () => {
+        changeSetting('vrView', !defaultSettings.vrView);
+        changeSetting('renderVrCreator', !defaultSettings.renderVrCreator);
+
     };
 
     return (
@@ -40,7 +58,7 @@ function Editor(props) {
                             </ul>
                         </div>
                     </div>
-                    <button id="vr-creator" onClick={() => changeSetting('vrView', !defaultSettings.vrView)}>VR creator</button>
+                    <button id="vr-creator" onClick={() => render3DEditor()}>VR creator</button>
                     <button id="another-maps" data-target="loadedMaps">See other maps <span className="maps-counter" /></button>
                     <button id="help" data-target="help-modal">Get some help</button>
                 </div>
@@ -56,7 +74,7 @@ function Editor(props) {
             </div>
         </div>
     );
-};
+}
 
 const mapStateToProps = state => {
     return {

@@ -1,7 +1,7 @@
 import React, {useEffect}       from 'react';
 import Editor                   from './components/editor/editor.component';
 // import HelpModal from './components/helpModal/helpModal.component';
-// import VrScene from './components/vrScene/vrScene.component';
+import VrScene from './components/vrScene/vrScene.component';
 import Render2D                 from './components/editor/render2d.component';
 import {connect}                from 'react-redux'
 import * as actionTypes         from './store/actions';
@@ -16,21 +16,21 @@ function App(props) {
     }, [props.defaultSettings]);
     return (
         <>
-            <header className="heading">
+            {(!props.defaultSettings.vrView || !props.defaultSettings.canRenderVr) && <header className="heading">
                 <h1>Welcome to the Labyrinth Game Experience</h1>
                 <h3>Will you be able to back here...</h3>
-            </header>
+            </header>}
             <main>
                 {props.defaultSettings.canRenderVr && !props.defaultSettings.finish && <Render3D/>}
                 {!props.defaultSettings.vrView && !props.defaultSettings.finish && <Editor/>}
-                {props.defaultSettings.render2DView && !props.defaultSettings.finish && <Render2D/>}
+                {props.defaultSettings.generateGrid && !props.defaultSettings.finish && <Render2D/>}
                 {props.defaultSettings.finish && <HiScore/>}
                 {/* <HelpModal/> */}
-                {/*props.defaultSettings.vrView &&
+                {props.defaultSettings.vrView && props.defaultSettings.renderVrCreator &&
                     <div className="preview">
                         <VrScene/>
                     </div>
-                */}
+                }
                 <div id="loadedMaps" className="hidden"/>
             </main>
         </>

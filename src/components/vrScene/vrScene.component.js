@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 
 function VrScene(props) {
     const {renderVrCreator} = props.defaultSettings;
+    console.log(renderVrCreator);
     return (
         <Scene  id="labyrinth-scene" background={{color: 'black'}} wasd-controls={false}>
             <Player/>
