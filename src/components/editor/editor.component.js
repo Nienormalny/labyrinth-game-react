@@ -32,7 +32,6 @@ function Editor(props) {
     const render3DEditor = () => {
         changeSetting('vrView', !defaultSettings.vrView);
         changeSetting('renderVrCreator', !defaultSettings.renderVrCreator);
-
     };
 
     return (
