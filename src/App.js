@@ -23,7 +23,7 @@ function App(props) {
             <main>
                 {props.defaultSettings.canRenderVr && !props.defaultSettings.finish && <Render3D/>}
                 {!props.defaultSettings.vrView && !props.defaultSettings.finish && <Editor/>}
-                {props.defaultSettings.generateGrid && !props.defaultSettings.finish && <Render2D/>}
+                {props.defaultSettings.generateGrid && !props.defaultSettings.renderVrCreator && !props.defaultSettings.finish && <Render2D/>}
                 {props.defaultSettings.finish && <HiScore/>}
                 {/* <HelpModal/> */}
                 {props.defaultSettings.vrView && props.defaultSettings.renderVrCreator &&

@@ -161,16 +161,18 @@ export const selectRenderedPath = (selectedPathIndex, event, wasClicked, props) 
     }
 };
 export const createArray = (props) => {
-    const {mapArray, pathArray, sumOfPaths, roundWalls} = props.defaultSettings;
+    const {mapArray, pathArray, sumOfPaths, roundWalls, renderVrCreator, selectedCol, countClick} = props.defaultSettings;
     const renderValidPathOptions = [];
     const renderDisableIfSelected = [];
     const renderAvailablePathsArray = [];
     const renderActivePathArray = [];
     const renderLabyrinthArray = [];
+    let currentMapArray;
 
+    console.log('CREATE ARRAY', renderVrCreator);
     let previousPath = 0;
     _.forEach(pathArray, (item) => {
-        const pathItem = document.querySelectorAll('.path')[item];
+        const pathItem = renderVrCreator ? document.querySelectorAll('.grid-path')[item] : document.querySelectorAll('.path')[item];
         const pathIndex = parseFloat(pathItem.dataset.pathIndex);
         const isOutside = pathItem.dataset.pathIndex <= roundWalls
             || pathItem.dataset.pathIndex - previousPath === roundWalls
@@ -248,14 +250,46 @@ export const createArray = (props) => {
         }
     });
 
-    props.changeSetting('mapArray', [...Array(roundWalls).keys()].reduce((prev, curr) => {
+    currentMapArray = [...Array(roundWalls).keys()].reduce((prev, curr) => {
         return [...prev,  pathArray.slice(roundWalls * curr, roundWalls * curr + roundWalls)];
-    }, []));
+    }, [])
 
+    props.changeSetting('mapArray', currentMapArray);
     props.changeSetting('renderFinish', true);
     props.changeSetting('labyrinthArray', renderLabyrinthArray);
     props.changeSetting('activePathArray', renderActivePathArray);
     props.changeSetting('availablePathsArray', renderAvailablePathsArray);
     props.changeSetting('validPathOptions', renderValidPathOptions);
     props.changeSetting('disableIfSelected', renderDisableIfSelected);
+
+    if (renderVrCreator && selectedCol) {
+        currentMapArray.forEach(function (e, x) {
+            currentMapArray.forEach(function (a, y) {
+                const planes = document.querySelectorAll('.grid-path');
+                const index = currentMapArray[x][y];
+
+                planes[index].setAttribute('scale', '0 0 0');
+                planes[index].setAttribute('animation', 'easing: easeOutElastic; from: 0 0 -' + index + '; to: 0.7 0.7 1; property: scale; dur: 3500; elasticity: 600; delay: ' + index + '0');
+                planes[index].setAttribute('rotate', '0 0 0');
+                planes[index].setAttribute('color', '#af71db');
+
+                if (renderLabyrinthArray[index].active && countClick === 0) {
+                    planes[index].classList.add('clickable');
+                }
+
+                if (planes[index].classList.contains('disabled')) {
+                    planes[index].setAttribute('color', '#333333');
+                }
+
+                planes[index].setAttribute('position', `${x} ${y} -1`);
+            });
+        });
+        // const gridPath = document.querySelectorAll('.grid-path');
+        /*Array.from(gridPath).forEach(function (e, i) {
+            gridPath[i].setAttribute('selectblock', '');
+        });*/
+        // vrInfo.setAttribute('value','Create your own labyrinth');
+        // vrInfo.setAttribute('animation','property: position; from: 0 2.7 -1.4; to: 0 -20 -1.4; easing: easeInQuart; delay: 3000; dur: 1500');
+        document.getElementById('render-grid').setAttribute('animation', `easing: easeOutElastic; from: -${Math.round(selectedCol / 2)} 0 -30; to: -${Math.round(selectedCol / 2)} 0 -25; property: position; dur: 1500;`);
+    }
 };
