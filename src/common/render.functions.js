@@ -1,17 +1,17 @@
 import React from 'react';
 import * as _ from 'lodash';
+import {store} from '../index';
 
 /* === GET VALID OPTIONS TO CHOSE === */
-const showValidOptions = (pathIndex, props) => {
-    const {validPathOptions, availablePathsArray, activePathArray, vrView, countSelectedBlocks, disableIfSelected, pathArray, labyrinthArray} = props.defaultSettings;
-    const {changeSetting} = props;
+const showValidOptions = (pathIndex, props, changeSetting) => {
+    const {validPathOptions, availablePathsArray, activePathArray, renderVrCreator, countSelectedBlocks, disableIfSelected, pathArray, labyrinthArray} = props.defaultSettings;
 
     changeSetting('countSelectedBlocks', countSelectedBlocks + 1);
 
     _.forEach(validPathOptions[pathIndex], option => {
         const rest = availablePathsArray.indexOf(option);
         // validPathOption looks like [clicked element, right, left, bottom, top]
-        const pathOption = vrView ? document.getElementsByClassName('grid-path')[option] : document.getElementsByClassName('path')[option];
+        const pathOption = renderVrCreator ? document.getElementsByClassName('grid-path')[option] : document.getElementsByClassName('path')[option];
         changeSetting('lastClicked', pathIndex);
         if (rest > -1) {
             availablePathsArray.splice(rest, 1);
@@ -28,9 +28,11 @@ const showValidOptions = (pathIndex, props) => {
 
             pathOption.style.pointerEvents = 'auto';
             pathOption.classList.add('to-use');
-            if (vrView && !pathOption.classList.contains('selected') && !pathOption.classList.contains('start-selected') && !pathOption.classList.contains('finish') && !pathOption.classList.contains('start-selected')) {
+            if (renderVrCreator && !pathOption.classList.contains('selected') && !pathOption.classList.contains('start-selected') && !pathOption.classList.contains('finish') && !pathOption.classList.contains('start-selected')) {
                 pathOption.setAttribute('color', '#ec902e');
                 pathOption.classList.add('clickable');
+            } else {
+
             }
         }
     });
@@ -39,7 +41,7 @@ const showValidOptions = (pathIndex, props) => {
         const disOption = disableIfSelected[pathIndex][key];
         const pathEl = document.getElementsByClassName('path');
         const vrPathEl = document.getElementsByClassName('grid-path');
-        const pathElement = vrView ? vrPathEl[disOption.disable] : pathEl[disOption.disable];
+        const pathElement = renderVrCreator ? vrPathEl[disOption.disable] : pathEl[disOption.disable];
         let countDisabled = 0;
 
         _.forEach(disOption.options, opt => {
@@ -49,7 +51,7 @@ const showValidOptions = (pathIndex, props) => {
                     countDisabled = 0;
                     pathElement.classList.remove('to-use');
                     pathElement.classList.add('disabled');
-                    if (vrView) {
+                    if (renderVrCreator) {
                         pathElement.setAttribute('color', '#333333');
                     }
                     pathElement.style.pointerEvents = 'none';
@@ -65,7 +67,7 @@ const showValidOptions = (pathIndex, props) => {
     });
     /* === Show selected paths / adding class to selected === */
     _.forEach(pathArray, item => {
-        const thisItem = vrView ? document.getElementsByClassName('grid-path')[item] : document.getElementsByClassName('path')[item];
+        const thisItem = renderVrCreator ? document.getElementsByClassName('grid-path')[item] : document.getElementsByClassName('path')[item];
         _.forEach(availablePathsArray, ap => {
             if (item === ap) {
                 thisItem.style.pointerEvents = 'none';
@@ -78,14 +80,21 @@ const showValidOptions = (pathIndex, props) => {
     });
 };
 /* === Selecting path function === */
-function selectPath(element, index, wasClicked, props) {
-    const {startSelected, renderFinish, labyrinthArray, finishCanBeSelected, finishSelected, vrView} = props.defaultSettings;
-    const {changeSetting} = props;
+function selectPath(element, index, wasClicked, props, changeSetting, event) {
+    const {startSelected, renderFinish, labyrinthArray, finishCanBeSelected, finishSelected, renderVrCreator} = props.defaultSettings;
 
     if (startSelected && renderFinish && labyrinthArray.length !== 0) {
         if (element.classList.contains('to-use') && wasClicked) {
             element.classList.add('selected');
+
             element.dataset.clickCounter = '1';
+            if (renderVrCreator && _.toNumber(element.dataset.clickCounter) === 1) {
+                element.setAttribute('color', '#1ace65');
+                const objectPosition = event.target.object3D.position;
+                const objectScale = event.target.object3D.scale;
+                element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectPosition.x + ' ' + objectPosition.y + ' ' + objectPosition.z + '; to: ' + objectPosition.x + ' ' + objectPosition.y + ' -0.5' + '; property: position; dur: 1500; elasticity: 600;');
+                element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectScale.x + ' ' + objectScale.y + ' ' + objectScale.z + '; to: ' + (objectScale.x + 0.2) + ' ' + (objectScale.y + 0.2) + ' ' + (objectScale.z + 0.2) + '; property: scale; dur: 1500; elasticity: 600;');
+            }
             element.classList.remove('to-use');
             labyrinthArray[index].option = 1;
             changeSetting('labyrinthArray', labyrinthArray);
@@ -99,7 +108,7 @@ function selectPath(element, index, wasClicked, props) {
             element.classList.remove('finish');
             element.classList.add('selected');
             element.dataset.clickCounter = '1';
-            if (vrView) {
+            if (renderVrCreator) {
                 element.setAttribute('color', '#1ace65');
             }
             labyrinthArray[index].option = 1;
@@ -110,7 +119,7 @@ function selectPath(element, index, wasClicked, props) {
 
         if (element.dataset.clickCounter === '2' && finishCanBeSelected && wasClicked && !finishSelected) {
             element.classList.add('finish');
-            if (vrView) {
+            if (renderVrCreator) {
                 element.setAttribute('color', 'blue');
             }
             element.classList.remove('selected');
@@ -118,42 +127,55 @@ function selectPath(element, index, wasClicked, props) {
             changeSetting('labyrinthArray', labyrinthArray);
             changeSetting('finishSelected', true);
         }
-        showValidOptions(index, props);
+        showValidOptions(index, props, changeSetting);
     }
 };
+
 /* === Selecting start function === */
-const selectStart = (element, index, props) => {
-    const {vrView, generateGrid, labyrinthArray} = props.defaultSettings;
+const selectStart = (element, index, props, changeSetting) => {
+    const {renderVrCreator, generateGrid, labyrinthArray} = props.defaultSettings;
     const clickable = document.querySelectorAll('.clickable');
     _.forEach(clickable, clickableElement => {
         clickableElement.classList.remove('clickable');
     });
 
     if (generateGrid) {
-        props.changeSetting('countClick', 1);
+        changeSetting('countClick', 1);
         labyrinthArray[index].option = 2;
-        props.changeSetting('labyrinthArray' , props.defaultSettings.labyrinthArray);
+        changeSetting('labyrinthArray' , props.defaultSettings.labyrinthArray);
         element.classList.add('start-selected');
-        if (vrView) {
+        if (renderVrCreator) {
             element.setAttribute('color', '#fd2929');
         }
-        props.changeSetting('startSelected', true);
-        showValidOptions(index, props);
+        changeSetting('startSelected', true);
+        showValidOptions(index, props, changeSetting);
     }
 };
-export const selectRenderedPath = (selectedPathIndex, event, wasClicked, props) => {
-    const {labyrinthArray} = props.defaultSettings;
+
+export const selectRenderedPath = (selectedPathIndex, event, wasClicked, changeSetting) => {
+    const props = store.getState();
+
+    const {labyrinthArray, renderVrCreator} = props.defaultSettings;
     const {countClick} = props.defaultSettings;
 
     if (labyrinthArray[selectedPathIndex].active) {
         const element = event.target;
+        console.log([element], element.dataset.clickCounter);
+
+        if (renderVrCreator && countClick === 0) {
+            const selectedObject3D = event.target.object3D;
+            const objectPosition = selectedObject3D.position;
+            const objectScale = selectedObject3D.scale;
+            element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectPosition.x + ' ' + objectPosition.y + ' ' + objectPosition.z + '; to: ' + objectPosition.x + ' ' + objectPosition.y + ' -0.5' + '; property: position; dur: 1500; elasticity: 600;');
+            element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectScale.x + ' ' + objectScale.y + ' ' + objectScale.z + '; to: ' + (objectScale.x + 0.2) + ' ' + (objectScale.y + 0.2) + ' ' + (objectScale.z + 0.2) + '; property: scale; dur: 1500; elasticity: 600;');
+        }
 
         switch (countClick) {
             case 0:
-                selectStart(element, selectedPathIndex, props);
+                selectStart(element, selectedPathIndex, props, changeSetting);
                 break;
             case 1:
-                selectPath(event.target, selectedPathIndex, wasClicked, props);
+                selectPath(element, selectedPathIndex, wasClicked, props, changeSetting, event);
                 break;
             default:
                 return false;
@@ -161,7 +183,7 @@ export const selectRenderedPath = (selectedPathIndex, event, wasClicked, props) 
     }
 };
 export const createArray = (props) => {
-    const {mapArray, pathArray, sumOfPaths, roundWalls, renderVrCreator, selectedCol, countClick} = props.defaultSettings;
+    const {pathArray, sumOfPaths, roundWalls, renderVrCreator, selectedCol, countClick} = props.defaultSettings;
     const renderValidPathOptions = [];
     const renderDisableIfSelected = [];
     const renderAvailablePathsArray = [];
@@ -169,7 +191,6 @@ export const createArray = (props) => {
     const renderLabyrinthArray = [];
     let currentMapArray;
 
-    console.log('CREATE ARRAY', renderVrCreator);
     let previousPath = 0;
     _.forEach(pathArray, (item) => {
         const pathItem = renderVrCreator ? document.querySelectorAll('.grid-path')[item] : document.querySelectorAll('.path')[item];
@@ -252,15 +273,7 @@ export const createArray = (props) => {
 
     currentMapArray = [...Array(roundWalls).keys()].reduce((prev, curr) => {
         return [...prev,  pathArray.slice(roundWalls * curr, roundWalls * curr + roundWalls)];
-    }, [])
-
-    props.changeSetting('mapArray', currentMapArray);
-    props.changeSetting('renderFinish', true);
-    props.changeSetting('labyrinthArray', renderLabyrinthArray);
-    props.changeSetting('activePathArray', renderActivePathArray);
-    props.changeSetting('availablePathsArray', renderAvailablePathsArray);
-    props.changeSetting('validPathOptions', renderValidPathOptions);
-    props.changeSetting('disableIfSelected', renderDisableIfSelected);
+    }, []);
 
     if (renderVrCreator && selectedCol) {
         currentMapArray.forEach(function (e, x) {
@@ -292,4 +305,11 @@ export const createArray = (props) => {
         // vrInfo.setAttribute('animation','property: position; from: 0 2.7 -1.4; to: 0 -20 -1.4; easing: easeInQuart; delay: 3000; dur: 1500');
         document.getElementById('render-grid').setAttribute('animation', `easing: easeOutElastic; from: -${Math.round(selectedCol / 2)} 0 -30; to: -${Math.round(selectedCol / 2)} 0 -25; property: position; dur: 1500;`);
     }
+    props.changeSetting('mapArray', currentMapArray);
+    props.changeSetting('renderFinish', true);
+    props.changeSetting('labyrinthArray', renderLabyrinthArray);
+    props.changeSetting('activePathArray', renderActivePathArray);
+    props.changeSetting('availablePathsArray', renderAvailablePathsArray);
+    props.changeSetting('validPathOptions', renderValidPathOptions);
+    props.changeSetting('disableIfSelected', renderDisableIfSelected);
 };
