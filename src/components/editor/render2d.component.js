@@ -15,7 +15,7 @@ function Render2D(props) {
     }, [generateGrid]);
 
     for (let pathNumber = 0; pathNumber < sumOfPaths; pathNumber++) {
-        pathElement.push(<div className="path" data-path-index={pathNumber} key={pathNumber} onClick={event => props.selectRenderedPaths(pathNumber, event, true, props)}/>);
+        pathElement.push(<div className="path" data-path-index={pathNumber} key={pathNumber} onClick={event => props.selectRenderedPaths(pathNumber, event, true, props.changeSetting)}/>);
     }
 
     return (
@@ -31,7 +31,7 @@ function Render2D(props) {
 const mapStateToProps = state => {
     return {
         defaultSettings: state.defaultSettings,
-        selectRenderedPaths: (selectedPathIndex, event, wasClicked, props) => selectRenderedPath(selectedPathIndex, event, wasClicked, props)
+        selectRenderedPaths: (selectedPathIndex, event, wasClicked, changeSetting) => selectRenderedPath(selectedPathIndex, event, wasClicked, changeSetting)
     }
 };
 

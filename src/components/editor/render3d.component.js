@@ -14,11 +14,9 @@ function Render3D(props) {
     let seconds = 0;
     let minutes = 0;
     let hours = 0;
-
     let fullTime;
     const {mapArray, finalMapArray, movementCount} = props.defaultSettings;
     let positionPlayer = {x: 0, y: 1, z: 0} /* (THIS IS INITIAL VALUE) */;
-
     let timer = null;
 
     const changePosition = (position, option) => {

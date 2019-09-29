@@ -6,10 +6,11 @@ import {Provider}           from 'react-redux';
 import rootReducer          from './store/reducer';
 import {createStore}        from 'redux';
 
-const store = createStore(
+export const store = createStore(
     rootReducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
 const LabyrinthApp = <Provider store={store}><App /></Provider>;
 
 ReactDOM.render(LabyrinthApp, document.getElementById('labyrinth-app'));
