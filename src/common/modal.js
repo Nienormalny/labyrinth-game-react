@@ -19,11 +19,11 @@ export function getCloseButton(targetModal) {
 
     return fragment;
 }
+
 export function modalFunction(modalElements) {
-    for (element in modalElements) {
+    for (let element in modalElements) {
         modalElements[element].addEventListener('click', function (e) {
-            const el = e.target,
-                target = document.getElementById(el.dataset.target);
+            const target = document.getElementById(e.target.dataset.target);
             if (target) {
                 if (target.id === 'loadedMaps' && loadMap.length > 0) {
                     loadMapsPreview(loadMap);
