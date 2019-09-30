@@ -26,7 +26,7 @@ function App(props) {
                 {props.defaultSettings.generateGrid && !props.defaultSettings.renderVrCreator && !props.defaultSettings.finish && <Render2D/>}
                 {props.defaultSettings.finish && <HiScore/>}
                 {/* <HelpModal/> */}
-                {props.defaultSettings.vrView && props.defaultSettings.renderVrCreator &&
+                {props.defaultSettings.vrView && props.defaultSettings.renderVrCreator && !props.defaultSettings.canRenderVr &&
                     <div className="preview">
                         <VrScene/>
                     </div>
