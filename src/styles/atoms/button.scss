@@ -1,0 +1,36 @@
+.button {
+  width: 100%;
+  transition: all 0.3s ease;
+
+  + .button {
+    margin-top: 25px;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 7px -4px #727272;
+  }
+}
+
+#another-maps {
+  background-color: #af71db;
+}
+#vr-creator {
+  background-color: #FF8833;
+  margin-top: 25px;
+}
+#help {
+  background-color: #FF3333;
+}
+.creator-title {
+  background-color: #1ace65;
+}
+.login {
+  background-color: #007bff;
+}
+#apply:hover,
+.creator-title:hover,
+#grid-settings li:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 7px -4px #727272;
+}

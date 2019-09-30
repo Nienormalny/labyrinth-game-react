@@ -7,10 +7,10 @@ import classNames from 'classnames'
 function Editor(props) {
     const {defaultSettings, changeSetting} = props;
 
-    const collapseEditor = () => {
-        const content = document.querySelector('.creator-content');
-        content.classList.contains('collapsed') ? content.classList.remove('collapsed') : content.classList.add('collapsed');
-    };
+    function toggleCollapse(e) {
+        const collapsible = document.querySelector('.' + e.target.dataset.collapse);
+        collapsible.classList.contains('collapsed') ? collapsible.classList.remove('collapsed') : collapsible.classList.add('collapsed');
+    }
 
     const show2DEditor = (value) => {
         const roundWalls = value + 2;
@@ -38,33 +38,35 @@ function Editor(props) {
         <div className="editor">
             <div className="editor-body">
                 <div id="settings-place">
-                    <div>
-                        <p className="creator-title creator-2d" onClick={collapseEditor}>2D creator</p>
-                        <div className="creator-content collapsed">
-                            <label htmlFor="creator-name">Creator name</label>
-                            <input id="creator-name" name="creator-name" type="text" placeholder="Write your name"/>
-                            <div className="hover-settings">
-                                <div className={classNames('checkbox', {'checked': defaultSettings.hover})} onClick={() => changeSetting('hover', !defaultSettings.hover)} />
-                                <span>On mouse hover creator</span>
-                            </div>
-                            <label htmlFor="grid-settings">Set number of columns</label>
-                            <ul id="grid-settings">
-                                {_.map(defaultSettings.cols, ((val, key) => {
-                                    return (
-                                        <li key={key} onClick={() => show2DEditor(val)}>{val}x{val}</li>
-                                    )
-                                }))}
-                            </ul>
+                    <button className="button creator-title creator-2d" type="button" onClick={toggleCollapse} data-collapse="creator-content">2D creator</button>
+                    <div className="creator-content collapsible collapsed">
+                        <label htmlFor="creator-name">Creator name</label>
+                        <input id="creator-name" name="creator-name" type="text" placeholder="Write your name"/>
+                        <div className="hover-settings">
+                            <div className={classNames('checkbox', {'checked': defaultSettings.hover})} onClick={() => changeSetting('hover', !defaultSettings.hover)} />
+                            <span>On mouse hover creator</span>
                         </div>
+                        <label htmlFor="grid-settings">Set number of columns</label>
+                        <ul id="grid-settings">
+                            {_.map(defaultSettings.cols, ((val, key) => {
+                                return (
+                                    <li key={key} onClick={() => show2DEditor(val)}>{val}x{val}</li>
+                                )
+                            }))}
+                        </ul>
                     </div>
-                    <button id="vr-creator" onClick={() => render3DEditor()}>VR creator</button>
-                    <button id="another-maps" data-target="loadedMaps">See other maps <span className="maps-counter" /></button>
-                    <button id="help" data-target="help-modal">Get some help</button>
+                    <button id="vr-creator" className="button" type="button" onClick={() => render3DEditor()}>VR creator</button>
+                    <button id="another-maps" className="button" type="button" data-target="loadedMaps">See other maps <span className="maps-counter" /></button>
+                    <button id="help" className="button" type="button" data-target="help-modal">Get some help</button>
+                    <button className="button login" type="button" onClick={toggleCollapse} data-collapse="login-form">Login</button>
+                    <div className="login-form collapsible collapsed">
+                        Coming Soon
+                    </div>
                 </div>
                 <div className="panel-settings hidden">
                     <button id="apply">Start game!</button>
-                    <h3 style={{borderRadius: '5px', color: '#333', fontWeight: 'normal', letterSpacing: '1px', backgroundColor: 'white', padding: '5px', marginBottom: '10px'}}>If you will click on the <span style={{color: '#1ace65', fontWeight: 'bold'}}>green</span> path second time, it will be set <span style={{color: '#0e7ef6', fontWeight: 'bold'}}>finish</span> point.</h3>
-                    <h4 style={{borderRadius: '5px', color: '#333', fontWeight: 'normal', letterSpacing: '1px', backgroundColor: 'white', adding: '5px', marginTop: 0}}>If you will click on the <span style={{color: '#0e7ef6', fontWeight: 'bold'}}>finish</span> path second time, it will be removed.</h4>
+                    <h3 style={{borderRadius: '5px', color: '#333', fontWeight: 'normal', letterSpacing: '1px', backgroundColor: 'white', padding: '5px', marginBottom: '10px'}}>To set the  <span style={{color: '#0e7ef6', fontWeight: 'bold'}}>finish</span> point, click on a <span style={{color: '#1ace65', fontWeight: 'bold'}}>green</span> path for the second time.</h3>
+                    <h4 style={{borderRadius: '5px', color: '#333', fontWeight: 'normal', letterSpacing: '1px', backgroundColor: 'white', adding: '5px', marginTop: 0}}>Click on the <span style={{color: '#0e7ef6', fontWeight: 'bold'}}>finish</span> point again and it becomes a normal path.</h4>
                 </div>
                 <div id="creator-place" className="hidden"/>
                 <div className="apply-block">
