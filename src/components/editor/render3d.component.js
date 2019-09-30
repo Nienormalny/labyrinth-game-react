@@ -83,10 +83,11 @@ function Render3D(props) {
         props.changeSetting('generateGrid', false);
         props.changeSetting('timeVisible', true);
         props.changeSetting('actualPlayerPosition', positionPlayer);
+        document.getElementById('render-labyrinth').enterVR();
     }, []);
 
     return (
-        <a-scene>
+        <a-scene id="render-labyrinth">
             <Entity light={{type: 'spot', color: '#ffffff', intensity: 3, decay: 1.6, distance: 24.5}} position={{x: 0, y: 7.5, z: -13}} />
             <Entity light={{type: 'spot', color: '#ffffff', intensity: 5, decay: 1.6, distance: 24.5}} position={{x: 0, y: 20, z: -13}} />
             <Player/>

@@ -9,6 +9,7 @@ const initialDefaultSettings = {
     cols: [10, 15, 20, 30],
     countClick: 0,
     countSelectedBlocks: 0,
+    cursorVisibility: true,
     canRenderVr: false,
     disableIfSelected: [],
     finalMapArray: [],
