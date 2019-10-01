@@ -18,10 +18,9 @@ function Editor(props) {
     };
 
     const validateCreatorName = (event) => {
-      console.log(event.target.value);
-      if(event.target.value.length>0) {
+      if(event.target.value.length > 0) {
         changeSetting('validCreatorName', true)
-      }else {
+      } else {
         changeSetting('validCreatorName', false)
       }
     }
