@@ -12,8 +12,8 @@ import HiScore                  from './components/hiscore/hiscore.component';
 
 function App(props) {
     useEffect(() => {
-        // console.log('DEFAULT SETTINGS', props.defaultSettings)
-    }, [props.defaultSettings]);
+        console.log('DEFAULT SETTINGS', props)
+    }, [props]);
     return (
         <>
             {(!props.defaultSettings.vrView || !props.defaultSettings.canRenderVr) && <header className="heading">
@@ -40,15 +40,16 @@ function App(props) {
 const mapStateToProps = state => {
   return {
       mapsState: state.mapState,
-      defaultSettings: state.defaultSettings
+      defaultSettings: state.defaultSettings,
+      authUser: state.authUser
   }
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-        onAddNewMap: (map) => dispatch({type: actionTypes.ADD_NEW_MAP, map: map}),
-        onUpdateTime: (time, map) => dispatch({type: actionTypes.UPDATE_TIME, map: map, time: time})
-  }
+  // return {
+        // onAddNewMap: (map) => dispatch({type: actionTypes.ADD_NEW_MAP, map: map}),
+        // onUpdateTime: (time, map) => dispatch({type: actionTypes.UPDATE_TIME, map: map, time: time})
+  // }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

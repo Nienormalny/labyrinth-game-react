@@ -2,10 +2,11 @@ import React from 'react';
 import * as _ from 'lodash';
 import * as actionTypes from '../../store/actions';
 import {connect} from 'react-redux';
-import classNames from 'classnames'
+import classNames from 'classnames';
+import SignInPage from "../signIn/signIn.component";
 
 function Editor(props) {
-    const {defaultSettings, changeSetting} = props;
+    const {defaultSettings, changeSetting, authUser} = props;
 
     function toggleCollapse(e) {
         const collapsible = document.querySelector('.' + e.target.dataset.collapse);
@@ -60,7 +61,7 @@ function Editor(props) {
                     <button id="help" className="button" type="button" data-target="help-modal">Get some help</button>
                     <button className="button login" type="button" onClick={toggleCollapse} data-collapse="login-form">Login</button>
                     <div className="login-form collapsible collapsed">
-                        Coming Soon
+                        {!authUser.email && <SignInPage /> }
                     </div>
                 </div>
                 <div className="panel-settings hidden">
@@ -79,7 +80,8 @@ function Editor(props) {
 
 const mapStateToProps = state => {
     return {
-        defaultSettings: state.defaultSettings
+        defaultSettings: state.defaultSettings,
+        authUser: state.authUser
     }
 };
 
