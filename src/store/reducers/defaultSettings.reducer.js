@@ -49,6 +49,8 @@ const initialDefaultSettings = {
     time: {},
     timeVisible: false,
     timeStringValue: '00:00:00',
+    usersArray: [],
+    userId: '',
     // timer: '',
     vrView: false,
     validPathOptions: [],

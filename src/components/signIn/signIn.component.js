@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {selectRenderedPath} from "../../common/render.functions";
 import * as actionTypes from "../../store/actions";
 import googleSingInImage from '../../assets/socialImages/btn_google_signin_dark_normal_web@2x.png';
-import {createUser, fetchUserById} from '../firebase/firebase.functions';
+import {createUser, fetchUserById, updateUserOnlineStatus} from '../firebase/firebase.functions';
 import * as firebase from 'firebase';
 
 const SignInPage = (props) => (
@@ -100,32 +100,34 @@ class SignInFormBase extends Component {
 }
 
 const SignInGoogleBase = (props) => {
-    const [error, setError] = useState('');
+    let errors;
     console.log(props);
     const onSubmit = event => {
+        event.preventDefault();
         props.firebase
             .doSignInWithGoogle()
             .then(socialAuthUser => {
                 const userRef = fetchUserById(socialAuthUser.user.uid);
 
-                userRef.on('value', (snapshot) => {
+                userRef.once('value', (snapshot) => {
                     const userData = snapshot.val();
                     if (userData && userData.id === socialAuthUser.user.uid) {
-                        return props.changeSetting('online', !props.defaultSettings.online);
+                        props.changeSetting('online', !props.defaultSettings.online);
+                        props.changeSetting('userId', userData.id);
+                        return updateUserOnlineStatus(userData.id, true);
                     }
                     return createUser(socialAuthUser.user.uid, socialAuthUser.additionalUserInfo.profile.email, socialAuthUser.additionalUserInfo.profile.name);
                 });
-                setError(null);
             })
             .catch(error => {
-                setError(error);
+                errors = error;
             });
-        event.preventDefault();
+
     };
     return (
         <form onSubmit={onSubmit}>
             <button type="submit" className="signInButton"><img src={googleSingInImage}/></button>
-            {error && <p>{error.message}</p>}
+            {errors && <p>{errors.message}</p>}
         </form>
     );
 };

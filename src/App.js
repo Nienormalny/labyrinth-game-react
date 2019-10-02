@@ -1,4 +1,5 @@
-import React, {useEffect}       from 'react';
+import React, {useEffect, useState}       from 'react';
+import * as _ from 'lodash';
 import Editor                   from './components/editor/editor.component';
 // import HelpModal from './components/helpModal/helpModal.component';
 import VrScene from './components/vrScene/vrScene.component';
@@ -10,18 +11,26 @@ import './styles/style.scss';
 import Render3D                 from './components/editor/render3d.component';
 import HiScore                  from './components/hiscore/hiscore.component';
 import * as firebase from 'firebase';
+import {fetchUsers, updateUserOnlineStatus} from './components/firebase/firebase.functions';
+
+let usersOnline;
 
 function App(props) {
+    const [allUsers, setAllUsers] = useState(undefined);
     useEffect(() => {
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user && !props.defaultSettings.online) {
-                props.changeSetting('online', !props.defaultSettings.online);
-            }
+        fetchUsers(props.changeSetting);
+        const usersRef = firebase.database().ref('users');
+
+        usersRef.on('value', (snapshot) => {
+            console.log(snapshot.val());
+            setAllUsers(snapshot.val());
         });
-    });
+    }, []);
+
     useEffect(() => {
-        console.log('DEFAULT SETTINGS', props);
-    });
+
+    }, [allUsers]);
+
     return (
         <>
             {(!props.defaultSettings.vrView || !props.defaultSettings.canRenderVr) && <header className="heading">
@@ -29,6 +38,17 @@ function App(props) {
                 <h3>Will you be able to back here...</h3>
             </header>}
             <main>
+                <section className="online-users">
+                    <h3>Online:</h3>
+                    {!_.isUndefined(allUsers) &&
+                        <ul>
+                            {console.log('USErS ONLINE', allUsers)}
+                            {_.map(_.filter(allUsers, ['online', true]), (user) => {
+                                return <li key={user.id}>{user.name}</li>;
+                            })}
+                        </ul>
+                    }
+                </section>
                 {props.defaultSettings.canRenderVr && !props.defaultSettings.finish && <Render3D/>}
                 {!props.defaultSettings.vrView && !props.defaultSettings.finish && <Editor/>}
                 {props.defaultSettings.generateGrid && !props.defaultSettings.renderVrCreator && !props.defaultSettings.finish && <Render2D/>}

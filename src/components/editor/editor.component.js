@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import classNames from 'classnames';
 import SignInPage from "../signIn/signIn.component";
 import * as firebase from 'firebase';
+import {updateUserOnlineStatus} from '../firebase/firebase.functions';
 
 function Editor(props) {
     const {defaultSettings, changeSetting} = props;
@@ -15,8 +16,9 @@ function Editor(props) {
     }
 
     const logOut = () => {
-        props.changeSetting('online', !defaultSettings.online);
-        return firebase.auth().signOut();
+        props.changeSetting('online', false);
+        firebase.auth().signOut().then(() => {});
+        return updateUserOnlineStatus(defaultSettings.userId, false);
     };
 
     const show2DEditor = (value) => {
@@ -72,7 +74,7 @@ function Editor(props) {
                                 <SignInPage />
                             </div>
                         </>
-                        ) : <button className="button logout" onClick={logOut}>Log out</button>}
+                        ) : <button className="button logout" type="button" onClick={() => logOut()}>Log out</button>}
                 </div>
                 <div className="panel-settings hidden">
                     <button id="apply">Start game!</button>
