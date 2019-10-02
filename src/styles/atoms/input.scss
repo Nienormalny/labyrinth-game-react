@@ -1,0 +1,17 @@
+input {
+  margin: 10px 0;
+  border: 1px solid #d1d1d1;
+  padding: 5px 10px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  width: 180px;
+  min-width: 180px;
+  max-width: 180px;
+  display: block;
+  text-align: center;
+  outline: none;
+  &.non-valid {
+    border: 2px solid $start-color;
+  }
+}

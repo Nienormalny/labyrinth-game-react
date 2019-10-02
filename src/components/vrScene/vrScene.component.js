@@ -33,10 +33,6 @@ function VrScene(props) {
         }
     }, [generateGrid, generateGridState, pathArray]);
 
-    useEffect(() => {
-        document.getElementById('labyrinth-scene').enterVR();
-    }, []);
-
     const toggleCursorVisibility = () => {
         props.changeSetting('cursorVisibility', !cursorVisibility);
     };

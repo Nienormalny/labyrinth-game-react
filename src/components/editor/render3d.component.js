@@ -83,7 +83,6 @@ function Render3D(props) {
         props.changeSetting('generateGrid', false);
         props.changeSetting('timeVisible', true);
         props.changeSetting('actualPlayerPosition', positionPlayer);
-        document.getElementById('render-labyrinth').enterVR();
     }, []);
 
     return (

@@ -1,36 +1,57 @@
-.button {
+.button,
+button {
   width: 100%;
   transition: all 0.3s ease;
+  border: 0;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  border-radius: 5px;
+  font-size: 14px;
+  letter-spacing: 1px;
 
-  + .button {
+  + .button,
+  + button {
     margin-top: 25px;
   }
 
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 3px 7px -4px #727272;
+    box-shadow: 0 3px 7px -4px $box-shadow-color;
   }
+  &.start {
+    width: 150px;
+    background-color: $green;
+  }
+  &.disabled {
+    background-color: $gray;
+  }
+}
+.disabled {
+  background-color: $gray;
+  pointer-events: none;
 }
 
 #another-maps {
-  background-color: #af71db;
+  background-color: $path-color;
 }
 #vr-creator {
-  background-color: #FF8833;
+  background-color: $additional-color;
   margin-top: 25px;
 }
 #help {
-  background-color: #FF3333;
+  background-color: $start-color;
 }
 .creator-title {
-  background-color: #1ace65;
+  background-color: $selected-path-color;
 }
 .login {
-  background-color: #007bff;
+  background-color: $finish-color;
 }
 #apply:hover,
 .creator-title:hover,
 #grid-settings li:hover {
   transform: scale(1.1);
-  box-shadow: 0 3px 7px -4px #727272;
+  box-shadow: 0 3px 7px -4px $box-shadow-color;
 }

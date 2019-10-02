@@ -1,4 +1,6 @@
+@import "colors";
 @import "atoms/button";
+@import "atoms/input";
 @import "atoms/collapsible";
 
 /* === ANIMATION === */
@@ -19,29 +21,6 @@
 body {
   background: linear-gradient(180deg, rgba(2,0,36,1) 16%, rgba(36,9,121,1) 56%, rgba(161,59,255,1) 100%);
 }
-/*body:after {
-  content: '';
-  display: block;
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  background: rgb(11, 28, 35);
-  background: linear-gradient(180deg, rgba(2,0,36,1) 16%, rgba(36,9,121,1) 56%, rgba(161,59,255,1) 100%);
-  !* animation-duration: 10s;
-  animation-name: backgroundRotation;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear; *!
-}
-body.aframe-inspector-opened:after {
-  content: 'NO, NO, NO! WRONG WAY CHEATER!';
-  color: white;
-  position: absolute;
-  text-align: center;
-  font-size: 25px;
-  line-height: 100vh;
-  z-index: 9999999;
-}*/
 .aframe-inspector-opened .editor {
   display: none !important;
 }
@@ -83,12 +62,12 @@ h3 {
   width: 100%;
 }
 .creator-name {
-  background-color: #1ace65;
+  background-color: $selected-path-color;
   margin-top: 0;
   width: 100%;
 }
 .hiscore-box {
-  background-color: #0e7ef6;
+  background-color: $finish-color;
   margin-top: 10px;
   width: 100%;
 }
@@ -98,7 +77,7 @@ h3 {
   padding: 5px;
   color: white;
   text-align: center;
-  background-color: #ff2c2c;
+  background-color: $start-color;
 }
 .hiscore-box > p {
   margin: 0;
@@ -136,14 +115,14 @@ h3 {
   left: 20px;
   top: 20px;
   z-index: 20;
-  background-color: rgb(253, 41, 41);
+  background-color: $start-color;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 3px 7px -4px #727272;
+  box-shadow: 0 3px 7px -4px $box-shadow-color;
 }
 .close-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 3px 5px -4px #727272;
+  box-shadow: 0 3px 5px -4px $box-shadow-color;
 }
 .close-btn > div {
   width: auto;
@@ -188,9 +167,6 @@ h3 {
 #hiscore-owner > button {
   background-color: rgb(14, 126, 246);
 }
-.disabled-btn {
-  background-color: rgb(113, 113, 113);
-}
 .help-body {
   display: flex;
   flex-direction: column;
@@ -230,19 +206,19 @@ h3 {
   background-color: #333333;
 }
 .help-second > li.start:before {
-  background-color: #fd2929;
+  background-color: $start-color;
 }
 .help-second > li.paths:before {
-  background-color: #1ace65;
+  background-color: $selected-path-color;
 }
 .help-second > li.finish:before {
-  background-color: #0e7ef6;
+  background-color: $finish-color;
 }
 .help-second > li.option:before {
-  background-color: #fff784;
+  background-color: $choosable-option-color;
 }
 .help-second > li.default:before {
-  background-color: #af71db;
+  background-color: $path-color;
 }
 .help-second > li.text {
   font-size: 18px;
@@ -294,6 +270,7 @@ h3 {
   padding: 20px;
   box-shadow: 2px 2px 10px -1px rgba(0, 0, 0, 0.306);
   border-radius: 10px;
+  margin-top: 15px;
 }
 #settings-place {
   display: flex;
@@ -317,7 +294,7 @@ h3 {
   margin: 0;
   padding:10px;
   background-color: #4d4d4d;
-  color: #45ed80;
+  color: $selected-path-color;
   font-weight: 100;
   letter-spacing: 1px;
 }
@@ -332,13 +309,6 @@ main {
   justify-content: center;
   transition: all 0.5s ease;
   .editor {
-    /*position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    overflow: auto;
-    transition: filter 1s ease;
-    height: 100vh;*/
     margin: 0 10px;
     transition: all 0.5s ease;
     .editor-body {
@@ -347,6 +317,7 @@ main {
   }
   #render2D {
     margin: 0 10px;
+    text-align: center;
     transition: all 0.5s ease;
   }
 }
@@ -354,7 +325,7 @@ main {
   filter: blur(5px);
 }
 .path {
-  background-color: #af71db;
+  background-color: $path-color;
   display: block;
   width: 25px;
   height: 25px;
@@ -368,16 +339,16 @@ main {
   border-radius: 10%;
 }
 .path:hover {
-  background-color: #969acb;
+  background-color: $path-hover-color;
   transform: scale(0.9);
 }
 .path.selected {
-  background-color: #1ace65;
+  background-color: $selected-path-color;
   transform: scale(0.9);
   box-shadow: 2px 4px 7px -2px #33333357;
 }
 .path.start-selected {
-  background-color: #ff2c2c !important;
+  background-color: $start-color !important;
   transform: scale(0.9);
   box-shadow: 2px 4px 7px -2px #33333357;
 }
@@ -387,10 +358,10 @@ main {
   color: white;
 }
 .path.to-use {
-  background-color: #fff784;
+  background-color: $choosable-option-color;
 }
 .path.finish {
-  background-color: #0e7ef6;
+  background-color: $finish-color;
   pointer-events: none;
   color: white;
 }
@@ -406,18 +377,8 @@ main {
   padding: 10px;
   margin: 0;
 }
-button {
-  border: 0;
-  padding: 10px;
-  color: white;
-  cursor: pointer;
-  outline: none;
-  border-radius: 5px;
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-label,
-input {
+
+label {
   width: 180px;
   min-width: 180px;
   max-width: 180px;
@@ -430,16 +391,8 @@ label {
   font-size: 12px;
   min-width: 100%;
 }
-input {
-  margin: 10px 0;
-  border: 1px solid #d1d1d1;
-  padding: 5px 10px;
-  font-size: 14px;
-  letter-spacing: 1px;
-  border-radius: 5px;
-}
 #accept-settings {
-  background-color: rgb(14, 126, 246);
+  background-color: $finish-color;
   width: 200px;
 }
 .apply-block {
@@ -448,7 +401,7 @@ input {
   left: 15px;
 }
 #apply {
-  background-color: #1ace65;
+  background-color: $selected-path-color;
   transition: transform 0.3s ease;
   margin: 25px 0;
   width: 150px;
@@ -482,16 +435,12 @@ input {
 }
 
 #login {
-  color: green;
-  background-color: black;
+  color: $selected-path-color;
+  background-color: white;
 }
 
 .checkbox.checked:before {
-  background-color: #1ace65;
-}
-.disabled-btn {
-  background-color: rgb(106, 106, 106) !important;
-  pointer-events: none;
+  background-color: $selected-path-color;
 }
 #grid-settings {
   display: flex;
@@ -503,7 +452,7 @@ input {
   display: block;
   padding: 5px;
   border-radius: 5px;
-  background-color: #af71db;
+  background-color: $path-color;
   color: white;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -540,7 +489,7 @@ input {
   }
   #loadedMaps .map-preview {
     margin-bottom: 20px;
-    box-shadow: 0 3px 7px -4px #727272;
+    box-shadow: 0 3px 7px -4px $box-shadow-color;
   }
   #loadedMaps .map-preview p {
     text-align: center;

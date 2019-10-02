@@ -34,6 +34,14 @@ function Editor(props) {
         changeSetting('renderVrCreator', !defaultSettings.renderVrCreator);
     };
 
+    const validateCreatorName = (event) => {
+      if(event.target.value.length > 0) {
+        changeSetting('validCreatorName', true)
+      }else {
+        changeSetting('validCreatorName', false)
+      }
+    };
+
     return (
         <div className="editor">
             <div className="editor-body">
@@ -41,7 +49,8 @@ function Editor(props) {
                     <button className="button creator-title creator-2d" type="button" onClick={toggleCollapse} data-collapse="creator-content">2D creator</button>
                     <div className="creator-content collapsible collapsed">
                         <label htmlFor="creator-name">Creator name</label>
-                        <input id="creator-name" name="creator-name" type="text" placeholder="Write your name"/>
+                        <input id="creator-name" name="creator-name" type="text" placeholder="Write your name" onChange={validateCreatorName}
+                        className={defaultSettings.validCreatorName ? '' : 'non-valid'}/>
                         <div className="hover-settings">
                             <div className={classNames('checkbox', {'checked': defaultSettings.hover})} onClick={() => changeSetting('hover', !defaultSettings.hover)} />
                             <span>On mouse hover creator</span>

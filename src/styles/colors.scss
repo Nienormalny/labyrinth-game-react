@@ -1,5 +1,21 @@
-$start-color: #ff313b;
-$finish-color: #1877ff;
-$wall-color: #333333;
-$path-color: #16ff62;
-$option-color: #fff24e;
+// Color variables
+$blue: #007bff;
+$dark-gray: #333333;
+$dark-purple: #7e61c4;
+$gray: #717171;
+$green: #1ace65;
+$orange: #FF8833;
+$purple: #af71db;
+$red: #ff313b;
+$yellow: #fff87b;
+
+// Functional variables
+$additional-color: $orange;
+$box-shadow-color: $gray;
+$choosable-option-color: $yellow;
+$finish-color: $blue;
+$path-color: $purple;
+$path-hover-color: $dark-purple;
+$selected-path-color: $green;
+$start-color: $red;
+$wall-color: $dark-gray;
