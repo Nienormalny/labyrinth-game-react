@@ -28,9 +28,23 @@
 .login {
   background-color: #007bff;
 }
+.logout {
+  background-color: #FF3333;
+}
 #apply:hover,
 .creator-title:hover,
 #grid-settings li:hover {
   transform: scale(1.1);
   box-shadow: 0 3px 7px -4px #727272;
+}
+.signInButton {
+  padding: 0;
+  background: none;
+  & > img {
+    transition: transform 0.3s ease;
+    width: 100%;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }

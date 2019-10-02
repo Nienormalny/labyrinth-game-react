@@ -4,14 +4,20 @@ import * as actionTypes from '../../store/actions';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
 import SignInPage from "../signIn/signIn.component";
+import * as firebase from 'firebase';
 
 function Editor(props) {
-    const {defaultSettings, changeSetting, authUser} = props;
+    const {defaultSettings, changeSetting} = props;
 
     function toggleCollapse(e) {
         const collapsible = document.querySelector('.' + e.target.dataset.collapse);
         collapsible.classList.contains('collapsed') ? collapsible.classList.remove('collapsed') : collapsible.classList.add('collapsed');
     }
+
+    const logOut = () => {
+        props.changeSetting('online', !defaultSettings.online);
+        return firebase.auth().signOut();
+    };
 
     const show2DEditor = (value) => {
         const roundWalls = value + 2;
@@ -59,10 +65,14 @@ function Editor(props) {
                     <button id="vr-creator" className="button" type="button" onClick={() => render3DEditor()}>VR creator</button>
                     <button id="another-maps" className="button" type="button" data-target="loadedMaps">See other maps <span className="maps-counter" /></button>
                     <button id="help" className="button" type="button" data-target="help-modal">Get some help</button>
-                    <button className="button login" type="button" onClick={toggleCollapse} data-collapse="login-form">Login</button>
-                    <div className="login-form collapsible collapsed">
-                        {!authUser.email && <SignInPage /> }
-                    </div>
+                    {!defaultSettings.online ? (
+                        <>
+                            <button className="button login" type="button" onClick={toggleCollapse} data-collapse="login-form">Login</button>
+                            <div className="login-form collapsible collapsed">
+                                <SignInPage />
+                            </div>
+                        </>
+                        ) : <button className="button logout" onClick={logOut}>Log out</button>}
                 </div>
                 <div className="panel-settings hidden">
                     <button id="apply">Start game!</button>
@@ -81,7 +91,6 @@ function Editor(props) {
 const mapStateToProps = state => {
     return {
         defaultSettings: state.defaultSettings,
-        authUser: state.authUser
     }
 };
 

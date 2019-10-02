@@ -4,8 +4,11 @@ import { withFirebase } from '../firebase/index.component';
 import {connect} from 'react-redux';
 import {selectRenderedPath} from "../../common/render.functions";
 import * as actionTypes from "../../store/actions";
+import googleSingInImage from '../../assets/socialImages/btn_google_signin_dark_normal_web@2x.png';
+import {createUser, fetchUserById} from '../firebase/firebase.functions';
+import * as firebase from 'firebase';
 
-const SignInPage = () => (
+const SignInPage = (props) => (
     <div className="ui container center two column centered grid">
         <div className="sixteen wide mobile eight wide tablet four wide computer column">
             {/*<h1 className="ui olive image header">*/}
@@ -14,9 +17,9 @@ const SignInPage = () => (
             {/*    </div>*/}
             {/*</h1>*/}
             {/*<SignInForm />*/}
-            <SignInGoogle />
-            <SignInFacebook />
-            <SignInTwitter />
+            <SignInGoogle {...props}/>
+            {/*<SignInFacebook />
+            <SignInTwitter />*/}
         </div>
     </div>
 );
@@ -96,15 +99,22 @@ class SignInFormBase extends Component {
     }
 }
 
-
 const SignInGoogleBase = (props) => {
     const [error, setError] = useState('');
+    console.log(props);
     const onSubmit = event => {
         props.firebase
             .doSignInWithGoogle()
             .then(socialAuthUser => {
-                console.log(socialAuthUser);
-                props.updateUser(socialAuthUser.additionalUserInfo.profile.email, socialAuthUser.additionalUserInfo.profile.name);
+                const userRef = fetchUserById(socialAuthUser.user.uid);
+
+                userRef.on('value', (snapshot) => {
+                    const userData = snapshot.val();
+                    if (userData && userData.id === socialAuthUser.user.uid) {
+                        return props.changeSetting('online', !props.defaultSettings.online);
+                    }
+                    return createUser(socialAuthUser.user.uid, socialAuthUser.additionalUserInfo.profile.email, socialAuthUser.additionalUserInfo.profile.name);
+                });
                 setError(null);
             })
             .catch(error => {
@@ -114,7 +124,7 @@ const SignInGoogleBase = (props) => {
     };
     return (
         <form onSubmit={onSubmit}>
-            <button type="submit">Sign In with Google</button>
+            <button type="submit" className="signInButton"><img src={googleSingInImage}/></button>
             {error && <p>{error.message}</p>}
         </form>
     );
@@ -194,15 +204,14 @@ const SignInTwitter = compose(
 
 const mapStateToProps = state => {
     return {
-        defaultSettings: state.defaultSettings,
-        authUser: state.authUser
+        defaultSettings: state.defaultSettings
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateUser: (email, name) => dispatch({type: actionTypes.UPDATE_USER, email, name})
+        changeSetting: (setting, value) => dispatch({type: actionTypes.CHANGE_DEFAULT_SETTING, setting, value}),
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignInGoogle);
+export default connect(mapStateToProps, mapDispatchToProps)(SignInPage);

@@ -35,6 +35,7 @@ const initialDefaultSettings = {
     // newCreatedMap: '',
     // newCreatedMapIndex: '',
     // ownerSaved: false,
+    online: false,
     pathArray: [],
     pathElement: [],
     placeWidth: 0,
