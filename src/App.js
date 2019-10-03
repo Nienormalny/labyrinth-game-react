@@ -9,6 +9,7 @@ import './firebase/firebase';
 import './styles/style.scss';
 import Render3D                 from './components/editor/render3d.component';
 import HiScore                  from './components/hiscore/hiscore.component';
+import HelpModal from "./components/helpModal/helpModal.component";
 
 function App(props) {
     useEffect(() => {
@@ -25,13 +26,13 @@ function App(props) {
                 {!props.defaultSettings.vrView && !props.defaultSettings.finish && <Editor/>}
                 {props.defaultSettings.generateGrid && !props.defaultSettings.renderVrCreator && !props.defaultSettings.finish && <Render2D/>}
                 {props.defaultSettings.finish && <HiScore/>}
-                {/* <HelpModal/> */}
                 {props.defaultSettings.vrView && props.defaultSettings.renderVrCreator && !props.defaultSettings.canRenderVr &&
                     <div className="preview">
                         <VrScene/>
                     </div>
                 }
                 <div id="loadedMaps" className="hidden"/>
+                <HelpModal />
             </main>
         </>
     );

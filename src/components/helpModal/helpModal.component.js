@@ -1,15 +1,17 @@
 import React from 'react';
+import { closeAllModals } from "../../common/modal";
 
-export default function HelpModal() {
+const HelpModal = () => {
     return (
-        <div id="help-modal" className="hidden">
-            <div className="help-body">
+        <div id="help-modal" className={"hidden modal dimmer"}>
+            <button className="button close-btn" onClick={closeAllModals}></button>
+            <div className="modal-content">
                 <h2>How to play</h2>
                 <ul className="help-info-list">
                     <li>1. Define the number of columns and type in your name.</li>
                     <li>
                         <p>2. Create your own labyrinth with click or in vr look control</p>
-                        <ul className="help-second">
+                        <ul className="help-sub-menu">
                             <li className="text"><b>Legend:</b></li>
                             <li className="wall" data-color="#333"> - walls</li>
                             <li className="start"> - define start on first click</li>
@@ -24,4 +26,6 @@ export default function HelpModal() {
             </div>
         </div>
     );
-}
+};
+
+export default HelpModal;

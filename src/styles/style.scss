@@ -1,7 +1,12 @@
 @import "colors";
+
+// atoms
 @import "atoms/button";
 @import "atoms/input";
 @import "atoms/collapsible";
+
+// molecules
+@import "molecules/modal";
 
 /* === ANIMATION === */
 @keyframes backgroundRotation {
@@ -106,37 +111,6 @@ h3 {
   color: white;
   margin: 0;
 }
-.close-btn {
-  display: block;
-  width: 30px;
-  height: 30px;
-  padding: 5px;
-  position: fixed;
-  left: 20px;
-  top: 20px;
-  z-index: 20;
-  background-color: $start-color;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 7px -4px $box-shadow-color;
-}
-.close-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 3px 5px -4px $box-shadow-color;
-}
-.close-btn > div {
-  width: auto;
-  height: 2px;
-  background-color: white;
-}
-.first-line {
-  transform: rotate(45deg) translate(0, 0);
-  transform-origin: -2px 8px;
-}
-.second-line {
-  transform: rotate(-45deg);
-  transform-origin: 29px 7px;
-}
 #hiscore-owner {
   position: fixed;
   z-index: 10;
@@ -167,63 +141,6 @@ h3 {
 #hiscore-owner > button {
   background-color: rgb(14, 126, 246);
 }
-.help-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 100px;
-  margin-left: -120px;
-  color: white;
-  background-color: rgba(45, 45, 45, 0.7);
-  box-shadow: 2px 2px 10px -1px rgba(0, 0, 0, 0.306);
-  padding: 25px;
-  border-radius: 10px;
-}
-#help-modal {
-  justify-content: center;
-}
-.help-info-list {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  padding: 0;
-}
-.help-second > li {
-  display: flex;
-  margin: 5px 0;
-  padding: 5px 0;
-}
-.help-second > li:not(.text):before {
-  content: '';
-  display: block;
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
-  margin-right: 5px;
-}
-.help-second > li.wall:before {
-  background-color: #333333;
-}
-.help-second > li.start:before {
-  background-color: $start-color;
-}
-.help-second > li.paths:before {
-  background-color: $selected-path-color;
-}
-.help-second > li.finish:before {
-  background-color: $finish-color;
-}
-.help-second > li.option:before {
-  background-color: $choosable-option-color;
-}
-.help-second > li.default:before {
-  background-color: $path-color;
-}
-.help-second > li.text {
-  font-size: 18px;
-  letter-spacing: 1px;
-}
 .creator-content,
 .login-form {
   background-color: rgba(47, 47, 47, 0.56);
@@ -231,37 +148,6 @@ h3 {
   border-radius: 5px;
   margin-top: 10px;
   color: white;
-}
-#loadedMaps,
-#help-modal {
-  display: flex !important;
-  align-items: flex-start;
-  align-content: baseline;
-  flex-wrap: wrap;
-  z-index: 3;
-  position: fixed;
-  overflow-y: auto;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba(226, 226, 226, 0.592);
-  padding-left: 60px;
-  transition: all .5s cubic-bezier(.4,.23,.54,.74);
-  bottom: 0;
-  opacity: 1;
-}
-#loadedMaps.hidden,
-#help-modal.hidden {
-  display: flex !important;
-  bottom: 100vh;
-  opacity: 0;
-}
-#loadedMaps .close-btn {
-  transition: all 2s ease;
-  opacity: 1;
-}
-#loadedMaps.hidden .close-btn {
-  top: -100px;
-  opacity: 0;
 }
 #creator-place {
   display: flex;
