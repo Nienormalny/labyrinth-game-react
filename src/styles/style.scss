@@ -365,6 +365,34 @@ main {
   pointer-events: none;
   color: white;
 }
+.path.dark-gray-legend {
+  background-color: $wall-color;
+}
+.path.red-legend {
+  background-color: $start-color;
+}
+.path.green-legend {
+  background-color: $selected-path-color;
+}
+.path.blue-legend {
+  background-color: $finish-color;
+}
+.path.yellow-legend {
+  background-color: $choosable-option-color;
+}
+.path.purple-legend {
+  background-color: $path-color;
+}
+.legend {
+  display: flex;
+  align-items: center;
+}
+.legend-label {
+  color: white;
+  font-size: 14px;
+  padding: 5px;
+}
+
 .apply-error {
   color: white;
   background-color: rgba(221, 51, 51, 0.755);
@@ -432,6 +460,44 @@ label {
     background-color: rgb(168, 168, 168);
     transition: all 0.3s ease;
   }
+}
+
+#buttons-container2D {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popover-wrapper {
+  position: relative;
+}
+.popover-content {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  left: -180px;
+  transform: translate(0, 40px);
+  border-radius: 10px;
+  background-color: $gray;
+  padding: 1.5rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  width: 185px;
+}
+.popover-content:before {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  right: 18px;
+  top: -8px;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent $gray transparent;
+}
+.popover-wrapper:hover .popover-content {
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, 10px);
+  transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
 }
 
 #login {

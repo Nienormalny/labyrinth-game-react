@@ -27,6 +27,11 @@ button {
   &.disabled {
     background-color: $gray;
   }
+  &.help {
+    background-color: $blue;
+    margin-top: 0;
+    width: 50px;
+  }
 }
 .disabled {
   background-color: $gray;
