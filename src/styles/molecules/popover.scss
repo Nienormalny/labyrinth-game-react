@@ -1,0 +1,68 @@
+.popover-wrapper {
+  position: relative;
+}
+.popover-content {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  left: -175px;
+  transform: translate(0, 40px);
+  border-radius: 10px;
+  background-color: $gray;
+  padding: 1.5rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  width: 180px;
+}
+.popover-content:before {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  right: 18px;
+  top: -8px;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent $gray transparent;
+}
+.popover-wrapper:hover .popover-content {
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, 10px);
+  transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+}
+.legend-box {
+  width: 17.5px;
+  height: 17.5px;
+  margin: 1px;
+  line-height: 25px;
+  box-shadow: 2px 2px 6px -1px #3333338c;
+  border-radius: 10%;
+  &.dark {
+    background-color: $wall-color;
+  }
+  &.red {
+    background-color: $start-color;
+  }
+  &.green {
+    background-color: $selected-path-color;
+  }
+  &.blue {
+    background-color: $finish-color;
+  }
+  &.yellow {
+    background-color: $choosable-option-color;
+  }
+  &.purple {
+    background-color: $path-color;
+  }
+}
+.legend-label {
+  color: white;
+  font-size: 14px;
+  padding: 5px;
+}
