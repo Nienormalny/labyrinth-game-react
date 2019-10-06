@@ -38,6 +38,10 @@ button {
   pointer-events: none;
 }
 
+#buttons-container2D {
+  display: flex;
+  justify-content: space-between;
+}
 #another-maps {
   background-color: $path-color;
 }

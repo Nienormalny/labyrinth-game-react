@@ -19,13 +19,13 @@ function Render2D(props) {
     }
 
     const legends = [
-        { boxStyle: 'path dark-gray-legend', label: 'walls' },
-        { boxStyle: 'path red-legend', label: 'define start on first click' },
-        { boxStyle: 'path green-legend', label: 'define path' },
-        { boxStyle: 'path blue-legend', label: 'last click defines finish' },
-        { boxStyle: 'path yellow-legend', label: 'choosable option' },
-        { boxStyle: 'path purple-legend', label: 'option to choose' },
-    ]
+        { boxStyle: 'legend-box dark', label: 'walls' },
+        { boxStyle: 'legend-box red', label: 'define start on first click' },
+        { boxStyle: 'legend-box green', label: 'define path' },
+        { boxStyle: 'legend-box blue', label: 'last click defines finish' },
+        { boxStyle: 'legend-box yellow', label: 'choosable option' },
+        { boxStyle: 'legend-box purple', label: 'option to choose' },
+    ];
 
     const popover = (
         <div className="popover-content">
