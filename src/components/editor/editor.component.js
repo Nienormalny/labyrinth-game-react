@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import * as actionTypes from '../../store/actions';
 import {connect} from 'react-redux';
 import classNames from 'classnames'
+import { toggleModal } from "../../common/modal";
 
 function Editor(props) {
     const {defaultSettings, changeSetting} = props;
@@ -66,7 +67,7 @@ function Editor(props) {
                     </div>
                     <button id="vr-creator" className="button" type="button" onClick={() => render3DEditor()}>VR creator</button>
                     <button id="another-maps" className="button" type="button" data-target="loadedMaps">See other maps <span className="maps-counter" /></button>
-                    <button id="help" className="button" type="button" data-target="help-modal">Get some help</button>
+                    <button id="help" className="button" type="button" data-modal="help-modal" onClick={toggleModal}>Get some help</button>
                     <button className="button login" type="button" onClick={toggleCollapse} data-collapse="login-form">Login</button>
                     <div className="login-form collapsible collapsed">
                         Coming Soon

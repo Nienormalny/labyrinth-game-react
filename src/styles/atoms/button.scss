@@ -64,3 +64,40 @@ button {
   transform: scale(1.1);
   box-shadow: 0 3px 7px -4px $box-shadow-color;
 }
+
+.close-btn {
+  display: block;
+  width: 45px;
+  height: 45px;
+  position: fixed;
+  left: $padding-width;
+  top: $padding-width;
+  z-index: 5;
+  background-color: rgb(253, 41, 41);
+  cursor: pointer;
+  border-radius: 0;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 5px -4px #727272;
+  }
+
+  &:before,
+  &:after {
+    content: "";
+    display: block;
+    width: 45px;
+    height: 2px;
+    background-color: white;
+    position: absolute;
+    left: 0;
+    top: calc(50% - 2px);
+  }
+  &:before {
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+}
