@@ -1,7 +1,6 @@
 import React, {useEffect, useState}     from 'react';
 import * as _                           from 'lodash';
-import 'aframe';
-import {Entity}                         from 'aframe-react';
+import * as AFRAME from 'aframe';
 import * as actionTypes                 from '../../store/actions';
 import {connect}                        from 'react-redux';
 import Player                           from '../player/player.component';
@@ -18,6 +17,7 @@ function Render3D(props) {
     const {mapArray, finalMapArray, movementCount} = props.defaultSettings;
     let positionPlayer = {x: 0, y: 1, z: 0} /* (THIS IS INITIAL VALUE) */;
     let timer = null;
+    const [actualPosition, setActualPosition] = useState(undefined);
 
     const changePosition = (position, option) => {
         props.changeSetting('actualPlayerPosition', position);
@@ -62,18 +62,23 @@ function Render3D(props) {
 
     let render3DBlocks = _.map(mapArray, (n, x) => {
         return _.map(mapArray, (a, z) => {
+            const blockPosition = x + ' 0.5 ' + z;
             switch (finalMapArray[mapArray[x][z]]) {
                 case 0:
-                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 5}} position={{x, y: 0.5, z}} material={{color: '#333333'}} option="0" data-name="wall"/>;
+                    return <a-box key={mapArray[x][z]} height={5} position={blockPosition} material="color: #333333" option="0" data-name="wall"/>;
                 case 1:
-                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} events={{click: () => changePosition({x, y: 1, z})}} position={{x, y: 0.5, z}} material={{color: '#1ace65'}} option="1" data-name="path" movement/>;
+                    return <a-box key={mapArray[x][z]} height={0.1} width={0.9} depth={0.9} position={blockPosition} material="color: #1ace65" option="1" data-name="path" movement/>;
                 case 2:
-                    positionPlayer = {x, y: 1, z};
-                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} events={{click: () => changePosition({x, y: 1, z})}} position={{x, y: 0.5, z}} material={{color: '#ff2c2c'}} option="2" data-name="start"/>;
+                    positionPlayer = x + ' 1 ' + z;
+                    if (!actualPosition) {
+                        setActualPosition(positionPlayer);
+                    }
+                    // onClick={(click) => changePosition(`${x}0.5 ${z}`)}
+                    return <a-box key={mapArray[x][z]} height={0.1} width={0.9} depth={0.9} position={blockPosition} material="color: #ff2c2c" option="2" data-name="start"/>;
                 case 3:
-                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 0.1, width: 0.9, depth: 0.9}} events={{click: () => changePosition({x, y: 1, z}, 'finish')}} position={{x, y: 0.5, z}} material={{color: '#0e7ef6'}} option="3" data-name="finish"/>;
+                    return <a-box key={mapArray[x][z]} height={0.1} width={0.9} depth={0.9} position={blockPosition} material="color: #0e7ef6" option="3" data-name="finish"/>;
                 default:
-                    return <Entity key={mapArray[x][z]} geometry={{primitive: 'box', height: 5}} position={{x, y: 0.5, z}} material={{color: '#333333'}}/>;
+                    return <a-box key={mapArray[x][z]} height={5} position={blockPosition} material="color: #333333"/>;
             }
         })
     });
@@ -83,17 +88,17 @@ function Render3D(props) {
         props.changeSetting('generateGrid', false);
         props.changeSetting('timeVisible', true);
         props.changeSetting('actualPlayerPosition', positionPlayer);
-    }, []);
+    });
 
     return (
         <a-scene id="render-labyrinth">
-            <Entity light={{type: 'spot', color: '#ffffff', intensity: 3, decay: 1.6, distance: 24.5}} position={{x: 0, y: 7.5, z: -13}} />
-            <Entity light={{type: 'spot', color: '#ffffff', intensity: 5, decay: 1.6, distance: 24.5}} position={{x: 0, y: 20, z: -13}} />
-            <Player/>
+            <a-entity light="type: spot; color: #ffffff; intensity: 3; decay: 1.6; distance: 24.5" position="0 7.5 -13" />
+            <a-entity light="type: spot; color: #ffffff; intensity: 5; decay: 1.6; distance: 24.5" position="0 20 -13" />
+            <Player actualPlayerPosition={actualPosition}/>
             {render3DBlocks}
         </a-scene>
     )
-};
+}
 
 const mapStateToProps = state => {
     return {

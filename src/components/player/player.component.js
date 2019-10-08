@@ -1,26 +1,25 @@
 import React                    from 'react';
 import 'aframe';
-import {Entity}                 from 'aframe-react';
 import * as actionTypes         from '../../store/actions';
 import {connect}                from 'react-redux';
 
 function Player(props) {
     let defaultSettings = props.defaultSettings;
-    let playerPosition = defaultSettings.actualPlayerPosition;
+    let playerPosition = props.actualPlayerPosition ? props.actualPlayerPosition : defaultSettings.actualPlayerPosition;
 
     return (
-        <Entity id="player" look-controls>
-            <Entity position={playerPosition} light={{type: 'point', color: '#ffffff', intensity: 2, decay: 2, distance: 5,}} />
-            <Entity laser-controls raycaster="far: 35" />
-            <Entity id="control" primitive="a-camera" position={playerPosition} wasd-controls={{enabled: false}}>
-                {defaultSettings.cursorVisibility && <Entity cursor={{fuse: true, fuseTimeout: 300}} animation__click={{property: 'scale', startEvents: 'click', from: '0.5 0.5 0.5', to: '0.3 0.3 0.3', dur: 300}}><Entity primitive="a-cursor" scale="0.5 0.5 0.5" position={{x: 0, y: 0, z: '-1'}} material={{color: 'white'}}/></Entity>}
-                <Entity  position={{x: 0, y: 0.1, z: '-0.4'}}>
-                    <Entity id="timer" primitive="a-text" value={defaultSettings.timeStringValue} align="center" height="0.3" width="0.3" visible={defaultSettings.timeVisible} />
-                </Entity>
-            </Entity>
-        </Entity>
+        <a-entity id="player" look-controls>
+            <a-entity position={playerPosition} light="type: point; color: #ffffff; intensity: 2; decay: 2; distance: 5" />
+            <a-entity laser-controls raycaster="far: 35"/>
+            <a-entity id="control" primitive="a-camera" position={playerPosition} wasd-controls={false}>
+                {defaultSettings.cursorVisibility && <a-entity cursor="fuse: true; fuseTimeout: 300"><a-entity primitive="a-cursor" scale="0.5 0.5 0.5" position="0 0 -1" material="color: white"/></a-entity>}
+                <a-entity  position="0 0.1 -0.4">
+                    <a-entity id="timer" primitive="a-text" value={defaultSettings.timeStringValue} align="center" height="0.3" width="0.3" visible={defaultSettings.timeVisible} />
+                </a-entity>
+            </a-entity>
+        </a-entity>
     );
-};
+}
 
 const mapStateToProps = state => {
     return {
