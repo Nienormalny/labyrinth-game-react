@@ -47,8 +47,8 @@ function Editor(props) {
         <div className="editor">
             <div className="editor-body">
                 <div id="settings-place">
-                    <button className="button creator-title creator-2d" type="button" onClick={toggleCollapse} data-collapse="creator-content">2D creator</button>
-                    <div className="creator-content collapsible collapsed">
+                    {false && <button className="button creator-title creator-2d" type="button" onClick={toggleCollapse} data-collapse="creator-content">2D creator</button>}
+                    {false && <div className="creator-content collapsible collapsed">
                         <label htmlFor="creator-name">Creator name</label>
                         <input id="creator-name" name="creator-name" type="text" placeholder="Write your name" onChange={validateCreatorName}
                         className={defaultSettings.validCreatorName ? '' : 'non-valid'}/>
@@ -64,7 +64,7 @@ function Editor(props) {
                                 )
                             }))}
                         </ul>
-                    </div>
+                    </div>}
                     <button id="vr-creator" className="button" type="button" onClick={() => render3DEditor()}>VR creator</button>
                     <button id="another-maps" className="button" type="button" data-target="loadedMaps">See other maps <span className="maps-counter" /></button>
                     <button id="help" className="button" type="button" data-modal="help-modal" onClick={toggleModal}>Get some help</button>
