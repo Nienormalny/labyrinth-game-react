@@ -17,7 +17,7 @@ projects: Vr Only Project
 
 ---
 ### **Project**
--[ ] - Vr Only Project
+- [ ] Vr Only Project
 ### **Describe your feature idee**
 A clear and concise description of what the feature is.
 
