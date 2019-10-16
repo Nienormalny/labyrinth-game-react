@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: "[FEATURE]"
+title: ''
 labels: feature
 assignees: Nienormalny
 
@@ -17,7 +17,7 @@ projects: Vr Only Project
 
 ---
 ### **Project**
-[ ] - Vr Only Project
+-[ ] - Vr Only Project
 ### **Describe your feature idee**
 A clear and concise description of what the feature is.
 
