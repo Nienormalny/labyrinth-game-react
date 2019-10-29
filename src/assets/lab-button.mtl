@@ -1,0 +1,12 @@
+# Blender MTL File: 'lab-button.blend'
+# Material Count: 1
+
+newmtl Material
+Ns 65.476314
+Ka 0.541284 0.541284 0.541284
+Kd 0.019544 0.019544 0.019544
+Ks 0.582569 0.582569 0.582569
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 3

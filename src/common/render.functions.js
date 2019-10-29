@@ -4,7 +4,7 @@ import {store} from '../index';
 import {getRandomId} from './widgets';
 
 /* === SAVE FINAL MAP === */
-export const saveFinalMap = (changeSetting) => {
+const saveFinalMap = (changeSetting) => {
     const props = store.getState();
     const {labyrinthArray, loadMap, mapArray, time, renderVrCreator} = props.defaultSettings;
     const renderFinalMapArray = [];
@@ -137,8 +137,8 @@ function selectPath(element, index, wasClicked, props, changeSetting, event) {
                 element.setAttribute('color', '#1ace65');
                 const objectPosition = event.target.object3D.position;
                 const objectScale = event.target.object3D.scale;
-                element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectPosition.x + ' ' + objectPosition.y + ' ' + objectPosition.z + '; to: ' + objectPosition.x + ' ' + objectPosition.y + ' -0.5' + '; property: position; dur: 1000; elasticity: 600; delay: 0;');
-                element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectScale.x + ' ' + objectScale.y + ' ' + objectScale.z + '; to: ' + (objectScale.x + 0.2) + ' ' + (objectScale.y + 0.2) + ' ' + (objectScale.z + 0.2) + '; property: scale; dur: 1000; elasticity: 600; delay: 0;');
+                element.setAttribute('animation', 'easing: linear; from: ' + objectPosition.x + ' ' + objectPosition.y + ' ' + objectPosition.z + '; to: ' + objectPosition.x + ' ' + objectPosition.y + ' 1' + '; property: position; dur: 3000; elasticity: 600; delay: 0;');
+                // element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectScale.x + ' ' + objectScale.y + ' ' + objectScale.z + '; to: ' + (objectScale.x + 0.2) + ' ' + (objectScale.y + 0.2) + ' ' + (objectScale.z + 0.2) + '; property: scale; dur: 3000; elasticity: 600; delay: 0;');
             }
             element.classList.remove('to-use');
             labyrinthArray[index].option = 1;
@@ -209,8 +209,8 @@ export const selectRenderedPath = (selectedPathIndex, event, wasClicked, changeS
             const selectedObject3D = event.target.object3D;
             const objectPosition = selectedObject3D.position;
             const objectScale = selectedObject3D.scale;
-            element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectPosition.x + ' ' + objectPosition.y + ' ' + objectPosition.z + '; to: ' + objectPosition.x + ' ' + objectPosition.y + ' -0.5' + '; property: position; dur: 500; elasticity: 600;');
-            element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectScale.x + ' ' + objectScale.y + ' ' + objectScale.z + '; to: ' + (objectScale.x + 0.2) + ' ' + (objectScale.y + 0.2) + ' ' + (objectScale.z + 0.2) + '; property: scale; dur: 500; elasticity: 600;');
+            element.setAttribute('animation', 'easing: linear; from: ' + objectPosition.x + ' ' + objectPosition.y + ' ' + objectPosition.z + '; to: ' + objectPosition.x + ' ' + objectPosition.y + ' 1' + '; property: position; dur: 3000; elasticity: 600;');
+            // element.setAttribute('animation', 'easing: easeOutElastic; from: ' + objectScale.x + ' ' + objectScale.y + ' ' + objectScale.z + '; to: ' + (objectScale.x + 0.2) + ' ' + (objectScale.y + 0.2) + ' ' + (objectScale.z + 0.2) + '; property: scale; dur: 3000; elasticity: 600;');
         }
 
         switch (countClick) {
@@ -325,7 +325,7 @@ export const createArray = (props) => {
                 const index = currentMapArray[x][y];
 
                 planes[index].setAttribute('scale', '0 0 0');
-                planes[index].setAttribute('animation', 'easing: easeOutElastic; from: 0 0 -' + index + '; to: 0.7 0.7 1; property: scale; dur: 3500; elasticity: 600; delay: ' + index + '0');
+                // planes[index].setAttribute('animation', 'easing: easeOutElastic; from: 0 0 0; to: 0.7 0.7 1; property: scale; dur: 3500; elasticity: 600; delay: ' + index + '0');
                 planes[index].setAttribute('rotate', '0 0 0');
                 planes[index].setAttribute('color', '#af71db');
 
@@ -334,13 +334,17 @@ export const createArray = (props) => {
                     planes[index].setAttribute('color', '#333333');
                 }
 
-                planes[index].setAttribute('position', `${x} ${y} -1`);
+                planes[index].setAttribute('position', `${x} ${y} 0`);
+                planes[index].setAttribute('scale', '0.7 0.7 1');
             });
         });
 
         // vrInfo.setAttribute('value','Create your own labyrinth');
         // vrInfo.setAttribute('animation','property: position; from: 0 2.7 -1.4; to: 0 -20 -1.4; easing: easeInQuart; delay: 3000; dur: 1500');
-        document.getElementById('render-grid').setAttribute('animation', `easing: easeOutElastic; from: -${Math.round(selectedCol / 2)} 0 -30; to: -${Math.round(selectedCol / 2)} 0 -25; property: position; dur: 1500;`);
+        // document.getElementById('render-grid').setAttribute('animation', `easing: easeOutElastic; from: -${Math.round(selectedCol / 2)} 0 -30; to: -${Math.round(selectedCol / 2)} 0 -${selectedCol + (selectedCol / 2)}; property: position; dur: 1500;`);
+        document.getElementById('render-grid').setAttribute('position', `-${Math.round(selectedCol / 2)} 0 -${selectedCol + (selectedCol / 2)}`);
+        document.getElementById('scene-light').setAttribute('position', `0 ${Math.round(selectedCol / 2)} -${selectedCol - (selectedCol / 2)}`);
+        document.getElementById('scene-light').setAttribute('light', `distance: ${selectedCol + 5}; intensity: ${selectedCol / 3}`);
     }
     props.changeSetting('mapArray', currentMapArray);
     props.changeSetting('renderFinish', true);

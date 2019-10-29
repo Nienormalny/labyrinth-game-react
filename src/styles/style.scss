@@ -1,3 +1,9 @@
+.a-enter-vr {
+  position: fixed;
+  z-index: 1;
+}
+
+/*
 @import "colors";
 
 // atoms
@@ -9,7 +15,7 @@
 // molecules
 @import "molecules/modal";
 
-/* === ANIMATION === */
+!* === ANIMATION === *!
 @keyframes backgroundRotation {
   from {
     transform: scale3d(3,3,1) rotateZ(0deg);
@@ -382,4 +388,4 @@ label {
   #loadedMaps .map-preview p {
     text-align: center;
   }
-}
+}*/

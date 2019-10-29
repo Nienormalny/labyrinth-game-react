@@ -1,0 +1,12 @@
+# Blender MTL File: 'lab-main-menu-scenery.blend'
+# Material Count: 1
+
+newmtl Material
+Ns 290.293980
+Ka 0.862314 0.862314 0.862314
+Kd 0.290932 0.072040 0.800000
+Ks 0.869091 0.869091 0.869091
+Ke 0.0 0.0 0.0
+Ni 0.000000
+d 0.800000
+illum 6
