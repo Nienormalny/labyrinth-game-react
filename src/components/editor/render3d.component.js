@@ -18,7 +18,9 @@ function Render3D({finalMap, changePlayerPosition, timeValue}) {
 
     const changePosition = (position, option) => {
         if (movementCount === 0) {
+            console.log('Movement count', movementCount);
             timer = setInterval(() => count(), 1000);
+            movementCount++;
         }
         if (option === 'finish') {
             finishPoint = true;
