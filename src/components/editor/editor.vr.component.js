@@ -19,7 +19,7 @@ let renderActivePathArray = [];
 let renderLabyrinthArray = [];
 let createArrayOnce = 0;
 
-function EditorVr({selectedGrid, mapSettings}) {
+function EditorVr({selectedGrid, mapSettings, planePosition}) {
     const roundWalls = selectedGrid + 2;
     const sumOfPaths = roundWalls * roundWalls;
     const [mapArray, setMapArray] = useState([]);
@@ -62,6 +62,8 @@ function EditorVr({selectedGrid, mapSettings}) {
         renderLabyrinthArray[index].option = 2;
         element.classList.add('start-selected');
         element.setAttribute('color', '#fd2929');
+        element.setAttribute('light', 'type: point; color: #fd2929; angle: 2; distance: 1.2; intensity: 1');
+        element.setAttribute('material', 'emissive: #fd2929; emissiveIntensity: 0.8');
         startSelected = true;
         showValidOptions(index);
     }
@@ -75,6 +77,8 @@ function EditorVr({selectedGrid, mapSettings}) {
                 element.dataset.clickCounter = '1';
                 if (_.toNumber(element.dataset.clickCounter) === 1) {
                     element.setAttribute('color', '#1ace65');
+                    element.setAttribute('light', 'type: point; color: #1ace65; angle: 2; distance: 1.2; intensity: 1');
+                    element.setAttribute('material', 'emissive: #1ace65; emissiveIntensity: 0.8');
                     const objectPosition = event.target.object3D.position;
                     element.setAttribute('animation', 'easing: linear; from: ' + objectPosition.x + ' ' + objectPosition.y + ' ' + objectPosition.z + '; to: ' + objectPosition.x + ' ' + objectPosition.y + ' 1' + '; property: position; dur: 3000; elasticity: 600; delay: 0;');
                 }
@@ -91,6 +95,8 @@ function EditorVr({selectedGrid, mapSettings}) {
                 element.classList.add('selected');
                 element.dataset.clickCounter = '1';
                 element.setAttribute('color', '#1ace65');
+                element.setAttribute('light', 'type: point; color: #1ace65; angle: 2; distance: 1.2; intensity: 1');
+                element.setAttribute('material', 'emissive: #1ace65; emissiveIntensity: 0.8');
                 renderLabyrinthArray[index].option = 1;
                 finishCanBeSelected = false;
                 finishSelected = false;
@@ -98,7 +104,9 @@ function EditorVr({selectedGrid, mapSettings}) {
 
             if (element.dataset.clickCounter === '2' && finishCanBeSelected && wasClicked && !finishSelected) {
                 element.classList.add('finish');
-                element.setAttribute('color', 'blue');
+                element.setAttribute('color', '#007bff');
+                element.setAttribute('light', 'type: point; color: #007bff; angle: 2; distance: 1.2; intensity: 1');
+                element.setAttribute('material', 'emissive: #007bff; emissiveIntensity: 0.8');
                 element.classList.remove('selected');
                 renderLabyrinthArray[index].option = 3;
                 finishSelected = true;
@@ -129,6 +137,8 @@ function EditorVr({selectedGrid, mapSettings}) {
                 pathOption.classList.add('to-use');
                 if (!pathOption.classList.contains('selected') && !pathOption.classList.contains('start-selected') && !pathOption.classList.contains('finish') && !pathOption.classList.contains('start-selected')) {
                     pathOption.setAttribute('color', '#ec902e');
+                    pathOption.setAttribute('light', 'type: point; color: #ec902e; angle: 2; distance: 1.2; intensity: 1');
+                    pathOption.setAttribute('material', 'emissive: #ec902e; emissiveIntensity: 0.8');
                     pathOption.classList.add('clickable');
                 }
             }
@@ -148,6 +158,8 @@ function EditorVr({selectedGrid, mapSettings}) {
                         pathElement.classList.remove('to-use');
                         pathElement.classList.add('disabled');
                         pathElement.setAttribute('color', '#333333');
+                        pathElement.setAttribute('light', 'type: point; color: #333333; angle: 2; distance: 1.2; intensity: 1');
+                        pathElement.setAttribute('material', 'emissive: #333333; emissiveIntensity: 0.8');
                         pathElement.style.pointerEvents = 'none';
                         renderLabyrinthArray[disOption.disable].active = false;
 
@@ -283,7 +295,8 @@ function EditorVr({selectedGrid, mapSettings}) {
 
             // vrInfo.setAttribute('value','Create your own labyrinth');
             // vrInfo.setAttribute('animation','property: position; from: 0 2.7 -1.4; to: 0 -20 -1.4; easing: easeInQuart; delay: 3000; dur: 1500');
-            document.getElementById('grid-container').setAttribute('animation', `easing: easeOutElastic; from: -${Math.round(selectedGrid / 2)} 0 -30; to: -${Math.round(selectedGrid / 2)} 0 -${selectedGrid + (selectedGrid / 2)}; property: position; dur: 1500;`);
+            document.getElementById('grid-container').setAttribute('animation', `easing: easeOutElastic; from: -${Math.round(selectedGrid / 2)} 0 -30; to: -${Math.round(selectedGrid / 2)} 1 -${selectedGrid + (selectedGrid / 2)}; property: position; dur: 1500;`);
+            planePosition({x: Math.round(selectedGrid / 2), y:1, z: (selectedGrid + (selectedGrid / 2))});
             // selectRenderedPath(selectedPathIndex, event, wasClicked, changeSetting)
             // document.getElementById('scene-light').setAttribute('position', `0 ${Math.round(selectedCol / 2)} -${selectedCol - (selectedCol / 2)}`);
             // document.getElementById('scene-light').setAttribute('light', `distance: ${selectedCol + 5}; intensity: ${selectedCol / 3}`);
